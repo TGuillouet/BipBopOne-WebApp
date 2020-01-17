@@ -1,9 +1,13 @@
 import React from 'react';
-import { storage } from '../firebase'
+import { storage,firestore } from '../firebase'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 const idU = 'qH1m2ckbI4QUtpyTAoDsVr7v5qZ2';
+const idProject = 'DEvsTtAQylXKZwNopVXJ';
+
+//firestore.collection('users').doc(idU).collection('projects').get().then(snap => { snap.forEach(doc => console.log(doc.data()))});
+//firestore.collection('users').doc(idU).collection('projects').get().then(snap => console.log(snap));
 
 export default class Home extends React.Component {
 
@@ -13,6 +17,15 @@ export default class Home extends React.Component {
             dropSelectedView: null,
             upladedFiles: {},
         }
+    }
+
+    async getSnapshotNameAndUrl(snapshot) {
+        const [ name, type ] = snapshot.metadata.name.split(".")
+        return { name, type, url: await snapshot.ref.getDownloadURL() }
+    }
+
+    findMember(files, member) {
+        return files.find((selectedFile) => `${selectedFile.name}.${selectedFile.type}` === this.state.upladedFiles[member].name)
     }
 
     handleChange = e => {
@@ -32,21 +45,33 @@ export default class Home extends React.Component {
 
     handleUpload = () => {
         const { upladedFiles } = this.state;
-        Object.values(upladedFiles).map( file =>  {
-            console.log(file)
-            const uploadTask = storage.ref(`test/${file.name}`).put(file);
-            uploadTask.on(storage.TaskEvent.STATE_CHANGED,
-                () => {
-                    // progrss function ....
-                },
-                (error) => {
-                    // error function ....
-                    console.log(error);
-                },
-                () => {
-                    // complete function ....
-                       NotificationManager.success('Success message', 'Send success');
-                });
+        const uploadTasksPromises = Object.values(upladedFiles).map( file => storage.ref(`${idU}/${idProject}/${file.name}`).put(file))
+        Promise.all(uploadTasksPromises).then(async (snapshots) => {
+            try {
+                const files = await Promise.all(snapshots.map(snapshot => this.getSnapshotNameAndUrl(snapshot)))
+                
+                const model = this.findMember(files, "model")
+                let material = null
+
+                let asset = {
+                    model: model.url,
+                    name: model.name,
+                    type: model.type,
+                    visible: true
+                }
+
+                if (files.length === 2) {
+                    material = this.findMember(files, "material")
+                    asset = { ...asset, material: material.url }
+                }
+
+                await firestore.collection('projects').doc(idProject).collection('assets').add(asset)
+                NotificationManager.success('Success message', 'Send success');
+            } catch(e) {
+                NotificationManager.error('Error message', 'Send error');
+            }
+
+
         })
     }
 
@@ -59,8 +84,8 @@ export default class Home extends React.Component {
             return (
                 <div>
                     <span>wavefront</span>
-                    <input name="model" type="file" onChange={this.handleChange} accept=".png,.obj" />
-                    <input name="material" type="file" onChange={this.handleChange} accept=".png,.mtl" />
+                    <input name="model" type="file" onChange={this.handleChange} accept=".obj" />
+                    <input name="material" type="file" onChange={this.handleChange} accept=".mtl" />
                     <button onClick={this.handleUpload}>Upload</button>
                 </div>
             )
