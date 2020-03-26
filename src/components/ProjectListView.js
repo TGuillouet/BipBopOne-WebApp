@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import {createProject, getUserProjects} from "../services/projects/projectsSevice";
-import {auth} from "../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faEye, faFile} from "@fortawesome/free-solid-svg-icons";
 import {TopProjectTableBar} from "./TopProjectTableBar";
 import {Table} from "./Table";
 import { CreateProjectForm } from "./CreateProjectForm";
 import Modal from "./Modal/Modal";
+import {withUserContext} from "../contexts/UserContext";
 
-let user = {};
 class ProjectListView extends Component {
     state = {
         projects: [],
@@ -18,13 +17,13 @@ class ProjectListView extends Component {
     };
 
     async componentDidMount() {
-        const userCred = await auth.signInWithEmailAndPassword("thomas.guillouet@edu.itescia.fr", "17tg11J59");
-        user = userCred.user;
-        this.fetchProjectList(user.uid);
+        this.props.context.setUser(this.props.context.user);
+
+        this.fetchProjectList(this.props.context.user.uid);
     }
 
     fetchProjectList = async (userId) => {
-        await this.setState({ loading: true })
+        await this.setState({ isLoading: true })
         const projects = await getUserProjects(userId);
         await this.setState({ projects, filteredProjects: projects, isLoading: false });
     };
@@ -44,7 +43,7 @@ class ProjectListView extends Component {
     onRowClick = (rowId) => (e) => {
         e.preventDefault();
 
-        // TODO: Redirect to the detail
+        this.props.history.push(`/detail/${rowId}`); // Redirect to the project detail
     };
 
     toggleCreateProjectModal = () => {
@@ -60,8 +59,10 @@ class ProjectListView extends Component {
     };
 
     createProject = async (projectData) => {
-        await createProject(user.uid, projectData);
-        this.fetchProjectList(user.uid);
+        const userId = this.props.context.user.uid;
+
+        await createProject(userId, projectData);
+        this.fetchProjectList(userId);
         this.toggleCreateProjectModal();
     };
 
@@ -86,4 +87,4 @@ class ProjectListView extends Component {
     }
 }
 
-export default ProjectListView;
+export default withUserContext(ProjectListView);
