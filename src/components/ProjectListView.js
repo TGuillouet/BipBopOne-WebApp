@@ -8,6 +8,7 @@ import {Table} from "./Table";
 import { CreateProjectForm } from "./CreateProjectForm";
 import Modal from "./Modal/Modal";
 
+let user = {};
 class ProjectListView extends Component {
     state = {
         projects: [],
@@ -16,10 +17,8 @@ class ProjectListView extends Component {
 
     async componentDidMount() {
         const userCred = await auth.signInWithEmailAndPassword("thomas.guillouet@edu.itescia.fr", "17tg11J59");
-
-        const projects = await getUserProjects(userCred.user.uid);
-
-        this.setState({ projects });
+        user = userCred.user;
+        this.fetchProjectList(user.uid);
     }
 
     generateRowComponent = () => {
