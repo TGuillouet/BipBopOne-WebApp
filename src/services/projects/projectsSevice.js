@@ -9,6 +9,12 @@ export function getUserProjects(userId) {
     return firestore.collection("users").doc(userId).collection("projects").get().then(getDocumentsFromSnapshot);
 }
 
+/**
+ * Create a project for the specified user in the database
+ * @param userId The user id
+ * @param project The project data
+ * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>}
+ */
 export function createProject(userId, project) {
     return firestore.collection("users").doc(userId).collection("projects").add({...project, whitelist: [], nb_files: 0});
 }
