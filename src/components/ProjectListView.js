@@ -33,8 +33,8 @@ class ProjectListView extends Component {
         })
     };
 
-    displayCreateProjectModal = () => {
-
+    toggleCreateProjectModal = () => {
+        this.setState(prevState => ({ createModalDisplayed: !prevState.createModalDisplayed }))
     };
 
     onResearch = (researchValue) => {
@@ -47,7 +47,7 @@ class ProjectListView extends Component {
             <div className="content root">
                 <div style={{ height: "100vh" }} className="columns is-desktop is-vcentered is-centered">
                     <div style={{ height: "70vh" }}  className="box column is-four-fifths table-container">
-                        <TopProjectTableBar onLeftButtonClick={this.displayCreateProjectModal} onResearch={this.onResearch} />
+                        <TopProjectTableBar onLeftButtonClick={this.toggleCreateProjectModal} onResearch={this.onResearch} />
                         <Table
                             items={this.state.projects}
                             render={this.generateRowComponent}
