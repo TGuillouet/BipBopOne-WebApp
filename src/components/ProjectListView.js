@@ -22,17 +22,22 @@ class ProjectListView extends Component {
         this.fetchProjectList(user.uid);
     }
 
-    generateRowComponent = () => {
-        return this.state.projects.map(({ id, name, client_name, state, whitelist }) => {
-            return (
-                <tr key={id}>
-                    <td>{name}</td>
-                    <td>{client_name}</td>
-                    <td><span className="tag is-primary">{state}</span></td>
-                    <td>{whitelist.length} <FontAwesomeIcon icon={faEye} /></td>
-                </tr>
-            );
-        })
+    fetchProjectList = async (userId) => {
+        await this.setState({ loading: true })
+        const projects = await getUserProjects(userId);
+        await this.setState({ projects, isLoading: false });
+    };
+
+    generateRowComponent = ({ id, name, client_name, state, whitelist, nb_files }) => {
+        return (
+            <tr key={id}>
+                <td>{name}</td>
+                <td>{client_name}</td>
+                <td><span className="tag is-primary">{state}</span></td>
+                <td>{whitelist.length} <FontAwesomeIcon icon={faEye} /></td>
+                <td>{nb_files} <FontAwesomeIcon icon={faFile} /></td>
+            </tr>
+        );
     };
 
     toggleCreateProjectModal = () => {
