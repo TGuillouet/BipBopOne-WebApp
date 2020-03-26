@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {getUserProjects} from "../services/projects/projectsSevice";
+import {createProject, getUserProjects} from "../services/projects/projectsSevice";
 import {auth} from "../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faEye, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faEye, faFile} from "@fortawesome/free-solid-svg-icons";
 import {TopProjectTableBar} from "./TopProjectTableBar";
 import {Table} from "./Table";
+import { CreateProjectForm } from "./CreateProjectForm";
+import Modal from "./Modal/Modal";
 
 class ProjectListView extends Component {
     state = {
