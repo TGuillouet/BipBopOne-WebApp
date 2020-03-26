@@ -31,7 +31,7 @@ class ProjectListView extends Component {
 
     generateRowComponent = ({ id, name, client_name, state, whitelist, nb_files }) => {
         return (
-            <tr key={id}>
+            <tr key={id} onClick={this.onRowClick(id)}>
                 <td>{name}</td>
                 <td>{client_name}</td>
                 <td><span className="tag is-primary">{state}</span></td>
@@ -39,6 +39,12 @@ class ProjectListView extends Component {
                 <td>{nb_files} <FontAwesomeIcon icon={faFile} /></td>
             </tr>
         );
+    };
+
+    onRowClick = (rowId) => (e) => {
+        e.preventDefault();
+
+        // TODO: Redirect to the detail
     };
 
     toggleCreateProjectModal = () => {
