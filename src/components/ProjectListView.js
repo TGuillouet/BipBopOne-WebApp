@@ -49,6 +49,13 @@ class ProjectListView extends Component {
         console.log(researchValue)
     };
 
+    createProject = async (projectData) => {
+        // TODO: Create the project in the database
+        await createProject(user.uid, projectData);
+        this.fetchProjectList(user.uid);
+        this.toggleCreateProjectModal();
+    };
+
     render() {
         return (
             <div className="content root">
@@ -56,11 +63,15 @@ class ProjectListView extends Component {
                     <div style={{ height: "70vh" }}  className="box column is-four-fifths table-container">
                         <TopProjectTableBar onLeftButtonClick={this.toggleCreateProjectModal} onResearch={this.onResearch} />
                         <Table
+                            isLoading={this.state.isLoading}
                             items={this.state.projects}
                             render={this.generateRowComponent}
                         />
                     </div>
                 </div>
+                <Modal isActive={this.state.createModalDisplayed} onClose={this.toggleCreateProjectModal}>
+                    <CreateProjectForm onSubmit={this.createProject} />
+                </Modal>
             </div>
         );
     }
