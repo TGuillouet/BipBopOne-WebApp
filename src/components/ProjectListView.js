@@ -12,6 +12,7 @@ let user = {};
 class ProjectListView extends Component {
     state = {
         projects: [],
+        filteredProjects: [],
         createModalDisplayed: false,
         isLoading: false
     };
@@ -25,7 +26,7 @@ class ProjectListView extends Component {
     fetchProjectList = async (userId) => {
         await this.setState({ loading: true })
         const projects = await getUserProjects(userId);
-        await this.setState({ projects, isLoading: false });
+        await this.setState({ projects, filteredProjects: projects, isLoading: false });
     };
 
     generateRowComponent = ({ id, name, client_name, state, whitelist, nb_files }) => {
@@ -45,8 +46,11 @@ class ProjectListView extends Component {
     };
 
     onResearch = (researchValue) => {
-        // TODO: Make the research
-        console.log(researchValue)
+        // FIXME: Make the research on the firebase functions
+        const filteredProjects = this.state.projects.filter((project) => {
+            return project.name.includes(researchValue) || project.description.includes(researchValue);
+        });
+        this.setState({ filteredProjects });
     };
 
     createProject = async (projectData) => {
@@ -63,7 +67,7 @@ class ProjectListView extends Component {
                         <TopProjectTableBar onLeftButtonClick={this.toggleCreateProjectModal} onResearch={this.onResearch} />
                         <Table
                             isLoading={this.state.isLoading}
-                            items={this.state.projects}
+                            items={this.state.filteredProjects}
                             render={this.generateRowComponent}
                         />
                     </div>
