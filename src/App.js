@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
-import Home from './components/home'
 
-import ProjectView from './components/ProjectView'
 import MenuView from './components/MenuView';
+import ProjectView from './components/ProjectView';
+import ProjectListView from "./components/ProjectListView";
 
-import 'bulma/css/bulma.css'
+import 'bulma/css/bulma.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function App() {
   document.body.style.overflow = "hidden"
