@@ -5,26 +5,14 @@ import PropTypes from "prop-types";
 
 function TopProjectTableBar(props) {
     const [ research, setResearchValue ] = React.useState("");
-    const [ isResearchInvalid, setIsResearchInvalid ] = React.useState(false);
-    const [ isResearchTouched, setIsResearchTouched ] = React.useState(false);
 
     const onSubmit = (e) => {
         e.preventDefault();
-
-        if (research.length === 0 && !isResearchInvalid && isResearchTouched) {
-            setIsResearchInvalid(true);
-        } else {
-            setIsResearchInvalid(false);
-        }
 
         props.onResearch(research)
     };
 
     const onChange = ({ target: { value } }) => {
-        if (!isResearchTouched) {
-            setIsResearchTouched(true);
-        }
-
         setResearchValue(value);
     };
 
@@ -39,7 +27,7 @@ function TopProjectTableBar(props) {
                 <div className="level-item">
                     <form className="field has-addons" onSubmit={onSubmit}>
                         <p className="control is-marginless">
-                            <input className={"input" + ((isResearchInvalid)? " is-danger": "")} placeholder="Rechercher" value={research} onChange={onChange} />
+                            <input className={"input"} placeholder="Rechercher" value={research} onChange={onChange} />
                         </p>
                         <p className="control">
                             <button className="button" type="submit">
