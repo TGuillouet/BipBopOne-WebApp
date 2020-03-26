@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {createProject, getUserProjects} from "../services/projects/projectsSevice";
-import {auth} from "../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faEye, faFile} from "@fortawesome/free-solid-svg-icons";
 import {TopProjectTableBar} from "./TopProjectTableBar";
@@ -24,7 +23,6 @@ class ProjectListView extends Component {
     }
 
     fetchProjectList = async (userId) => {
-        console.log(userId)
         await this.setState({ isLoading: true })
         const projects = await getUserProjects(userId);
         await this.setState({ projects, filteredProjects: projects, isLoading: false });
@@ -45,7 +43,7 @@ class ProjectListView extends Component {
     onRowClick = (rowId) => (e) => {
         e.preventDefault();
 
-        // TODO: Redirect to the detail
+        this.props.history.push(`/detail/${rowId}`); // Redirect to the project detail
     };
 
     toggleCreateProjectModal = () => {
