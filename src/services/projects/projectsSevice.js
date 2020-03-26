@@ -9,6 +9,10 @@ export function getUserProjects(userId) {
     return firestore.collection("users").doc(userId).collection("projects").get().then(getDocumentsFromSnapshot);
 }
 
+export function createProject(userId, project) {
+    return firestore.collection("users").doc(userId).collection("projects").add({...project, whitelist: [], nb_files: 0});
+}
+
 /**
  * Fetch the detail of a project from the database
  * @param userId The user id in the database
