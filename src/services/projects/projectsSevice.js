@@ -81,9 +81,7 @@ export function getDocumentsFromSnapshot(snapshot) {
     }
 
     let documents = [];
-
-    console.log(snapshot)
-
+    
     snapshot.forEach((document) => {
         documents.push({ id: document.id, ...document.data() });
     });
