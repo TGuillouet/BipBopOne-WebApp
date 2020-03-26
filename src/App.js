@@ -6,11 +6,14 @@ import ProjectListView from "./components/ProjectListView";
 
 import {auth} from "./firebase";
 import UserContext from "./contexts/UserContext";
+import {createBrowserHistory} from "history";
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 
 import './App.css';
 import 'bulma/css/bulma.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+const history = createBrowserHistory();
 
 function App() {
     const [ user, setUser ] = React.useState(null);
@@ -33,7 +36,7 @@ function App() {
                 </div>
 
                 <div className="column">
-                    <Router>
+                    <Router history={history}>
                         <Switch>
                             <Route exact path="/" component={(props) => {
                                 return (user)? <Redirect to="/projects" />: <div>Not logged</div>
