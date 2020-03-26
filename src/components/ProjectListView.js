@@ -12,7 +12,8 @@ let user = {};
 class ProjectListView extends Component {
     state = {
         projects: [],
-        createModalDisplayed: false
+        createModalDisplayed: false,
+        isLoading: false
     };
 
     async componentDidMount() {
