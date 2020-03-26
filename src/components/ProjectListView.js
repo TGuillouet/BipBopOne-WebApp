@@ -50,7 +50,6 @@ class ProjectListView extends Component {
     };
 
     createProject = async (projectData) => {
-        // TODO: Create the project in the database
         await createProject(user.uid, projectData);
         this.fetchProjectList(user.uid);
         this.toggleCreateProjectModal();
