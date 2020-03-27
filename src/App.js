@@ -50,17 +50,19 @@ function App() {
     )
 }
 
-const PrivateRoute = ({ component: Component, ...otherProps }) => (
-    <Route
-        {...otherProps}
-        render={props =>
-            otherProps.isLogged ? (
-                <Component {...props} />
-            ) : (
-                <Redirect to={{ pathname: "/" }} />
-            )
-        }
-    />
-);
+const PrivateRoute = ({ component: Component, ...otherProps }) => {
+    const renderIfLogged = props =>
+        otherProps.isLogged ? (
+            <Component {...props} />
+        ) : (
+            <Redirect to={{ pathname: "/" }} />
+        )
+    return (
+        <Route
+            {...otherProps}
+            render={renderIfLogged}
+        />
+    )
+};
 
 export default App;
