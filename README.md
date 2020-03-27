@@ -25,6 +25,5 @@ Pour accéder au projet par un navigateur, aller sur http://localhost:3000
 
 # Dépendences du projet
 
-Framework CSS: https://bulma.io \
-Wrapper bulma CSS: https://www.npmjs.com/package/react-bulma-components
+Framework CSS: https://bulma.io
 
