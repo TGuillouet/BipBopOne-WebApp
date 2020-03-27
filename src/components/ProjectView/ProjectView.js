@@ -5,10 +5,10 @@ import IntroProject from './IntroProject';
 import ProjectDescription from "./ProjectDescription";
 
 import { getProjectDetail, getProjectAssets } from "../../services/projects/projectsSevice";
-import { auth } from "../../firebase";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {withUserContext} from "../../contexts/UserContext";
 
 let user = {};
 class ProjectView extends Component {
@@ -33,8 +33,8 @@ class ProjectView extends Component {
         return (
             <tr key={id}>
                 <td>{name}</td>
-                <td>{created_at}</td>
-                <td>({visible}})?<FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} /></td>
+                <td>{new Date(created_at.seconds).toString()}</td>
+                <td>{(visible)?<FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</td>
                 <td><button class="button"><FontAwesomeIcon icon={faTrashAlt} /></button></td>
             </tr>
         );
@@ -42,14 +42,13 @@ class ProjectView extends Component {
 
 
     async componentDidMount() {
-        const userCred = await auth.signInWithEmailAndPassword("thomas.guillouet@edu.itescia.fr", "17tg11J59");
-        user = userCred.user;
-        const projectInfo = await getProjectDetail(user.uid, "NRemoAjlHE5wRyZq7Fy3");
-        const projectAssets = await getProjectAssets(user.uid, "NRemoAjlHE5wRyZq7Fy3");
-        await this.setState({ projectInfo });
-        await this.setState({ projectAssets });
-        console.log(this.state.projectInfo);
+        const user = this.props.context.user;
+
+        const projectInfo = await getProjectDetail(user.uid, this.props.match.params.id);
+        const projectAssets = await getProjectAssets(user.uid, this.props.match.params.id);
+        await this.setState({ projectInfo, projectAssets });
     }
+
     render() {
         return (
             <div class="columns is-gapless">
@@ -93,4 +92,4 @@ class ProjectView extends Component {
     }
 }
 
-export default ProjectView
+export default withUserContext(ProjectView)
