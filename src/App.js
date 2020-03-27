@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MenuView from './components/MenuView';
+import {MenuView} from './components/MenuView';
 import ProjectView from './components/ProjectView';
 import ProjectListView from "./components/ProjectListView";
 
@@ -31,12 +31,11 @@ function App() {
     return (
         <div className="root columns">
             <UserContext.Provider value={{ user, setUser }}>
-                <div className="column is-1">
-                    <MenuView />
-                </div>
-
-                <div className="column">
-                    <Router history={history}>
+                <Router history={history}>
+                    <div className="column is-1">
+                        <MenuView />
+                    </div>
+                    <div className="column">
                         <Switch>
                             <Route exact path="/" component={(props) => {
                                 return (user)? <Redirect to="/projects" />: <div>Not logged</div>
@@ -44,8 +43,8 @@ function App() {
                             <PrivateRoute isLogged={!!(user)} path="/projects" component={ProjectListView} />
                             <PrivateRoute isLogged={!!(user)} path="/detail/:id" component={ProjectView} />
                         </Switch>
-                    </Router>
-                </div>
+                    </div>
+                </Router>
             </UserContext.Provider>
         </div>
     )

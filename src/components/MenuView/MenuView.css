@@ -1,0 +1,18 @@
+.navbar {
+    height: 100%;
+}
+
+.navbar-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.navbar-start, .navbar-end {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0px;
+}
+
+
