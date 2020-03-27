@@ -1,3 +1,39 @@
+.center{
+    text-align: center;
+}
 .root {
     height: 100vh;
+}
+
+.ContactProjet{
+    max-height: 25vh;
+    height: 25vh;
+}
+
+.FichierProjet{
+    max-height: 50vh;
+    height: 50vh;
+}
+
+.BlockingContact{
+    max-height: 25vh;
+    height: 25vh;
+}
+
+.Padding{
+    padding: 5px;
+}
+
+.NoMargin{
+    margin: 0px;
+}
+
+.WidthExtend{
+    width: 100%;
+    max-width: 100%;
+}
+
+.HeightExtend{
+    height: 100%;
+    max-height: 100%;
 }

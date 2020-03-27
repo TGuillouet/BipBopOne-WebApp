@@ -31,4 +31,11 @@ Table.propTypes = {
     isLoading: Proptypes.bool
 };
 
+
+Table.defaultProps = { 
+    items: [],
+    render: ()=>{}
+}
+
+
 export default Table;
