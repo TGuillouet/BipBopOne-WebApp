@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {MenuView} from './components/MenuView';
-import ProjectView from './components/ProjectView';
+import ProjectView from './components/ProjectView/ProjectView';
 import ProjectListView from "./components/ProjectListView";
 
 import {auth} from "./firebase";
@@ -33,7 +33,7 @@ function App() {
             <UserContext.Provider value={{ user, setUser }}>
                 <Router history={history}>
                     <div className="column is-1">
-                        <MenuView />
+                        <MenuView/>
                     </div>
                     <div className="column">
                         <Switch>
