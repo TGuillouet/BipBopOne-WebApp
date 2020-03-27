@@ -34,7 +34,7 @@ class ProjectView extends Component {
             <tr key={id}>
                 <td>{name}</td>
                 <td>{new Date(created_at.seconds).toString()}</td>
-                <td>{(visible)?<FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</td>
+                <td>{(visible)?<FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}</td>
                 <td><button class="button"><FontAwesomeIcon icon={faTrashAlt} /></button></td>
             </tr>
         );
