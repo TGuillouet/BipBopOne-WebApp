@@ -1,3 +1,10 @@
+# General
+## Imports
+Chaque composant doit posséder son propre dossier avec à l'intérieur 2 à 3 fichiers
+- **index.js** qui va juste exporter le composant contenu dans COMPOSANT.jsx
+- **COMPOSANT.jsx** Le composant
+- **COMPOSANT.css** Sa feuille de style
+
 # Utilitaires
 
 ## Docker et docker compose
