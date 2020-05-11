@@ -1,5 +1,6 @@
-import React from "react";
+import React  from "react";
 import { useForm } from "react-hook-form";
+import Select from "../Select";
 
 function CreateProjectForm(props) {
     const {register, handleSubmit, errors} = useForm({
@@ -29,14 +30,13 @@ function CreateProjectForm(props) {
 
             <div className="field">
                 <label className="label">Etat du projet</label>
-                <div className="select">
-                    <select name="state" ref={register({ required: true })} placeholder="Description de votre projet">
-                        <option value="En cours">En cours</option>
-                        <option value="En attente">En attente</option>
-                        <option value="Terminé">Terminé</option>
-                    </select>
-                    <p className="has-text-danger">{errors.state && 'Ce champ est requis'}</p>
-                </div>
+                <Select name="state" ref={register({ required: true })} placeholder={"Description de votre projet"}>
+                  <option value="En cours">En cours</option>
+                  <option value="En attente">En attente</option>
+                  <option value="Terminé">Terminé</option>
+                  <option value="Annulé">Annulé</option>
+                </Select>
+                <p className="has-text-danger">{errors.state && 'Ce champ est requis'}</p>
             </div>
 
             <div className="level">
