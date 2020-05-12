@@ -1,6 +1,7 @@
 {
   "projects": {
-    "default": "bipbopone-prod"
+    "default": "bipbopone-prod",
+    "staging": "bipbopone"
   },
   "targets": {
     "bipbopone": {
