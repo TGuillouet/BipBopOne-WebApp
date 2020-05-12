@@ -80,7 +80,7 @@ export default class Home extends React.Component {
     }
 
     dropView() {
-        if (this.state.dropSelectedView == "wavefront") {
+        if (this.state.dropSelectedView === "wavefront") {
             return (
                 <div>
                     <span>wavefront</span>
@@ -90,7 +90,7 @@ export default class Home extends React.Component {
                 </div>
             )
         }
-        else if (this.state.dropSelectedView == "gltf") {
+        else if (this.state.dropSelectedView === "gltf") {
             return (
                 <div>
                     <span>gltf</span>
