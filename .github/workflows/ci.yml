@@ -38,8 +38,8 @@ jobs:
           CI: "false"
       
       - name: Building the app on production
-          if: github.ref == 'refs/heads/master'
-          run: yarn build
+        if: github.ref == 'refs/heads/master'
+        run: yarn build
 
       - name: Deploy in staging
         if: github.ref == 'refs/heads/develop'
