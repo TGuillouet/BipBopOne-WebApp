@@ -12,6 +12,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom
 import './App.css';
 import 'bulma/css/bulma.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import LoginPage from './components/LoginPage';
 
 const history = createBrowserHistory();
 
@@ -25,7 +26,6 @@ function App() {
             }
         });
 
-        auth.signInWithEmailAndPassword("thomas.guillouet@edu.itescia.fr", "17tg11J59"); // Automatic login
     }, [auth, setUser]);
 
     return (
@@ -38,7 +38,7 @@ function App() {
                     <div className="column">
                         <Switch>
                             <Route exact path="/" component={(props) => {
-                                return (user)? <Redirect to="/projects" />: <div>Not logged</div>
+                                return (user)? <Redirect to="/projects" />: <LoginPage/>
                             }} />
                             <PrivateRoute isLogged={!!(user)} path="/projects" component={ProjectListView} />
                             <PrivateRoute isLogged={!!(user)} path="/detail/:id" component={ProjectView} />
