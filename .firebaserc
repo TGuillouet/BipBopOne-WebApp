@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "bipbopone-prod"
+  },
+  "targets": {
+    "bipbopone": {
+      "hosting": {
+        "dashboard": [
+          "dashboard-bipbopone"
+        ]
+      }
+    }
   }
 }
