@@ -5,16 +5,16 @@ on:
     branches: [master]
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - run: yarn install --frozen-lockfile
-      - run: yarn test
+#   test:
+#     name: Test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: actions/setup-node@v1
+#         with:
+#           node-version: 12
+#       - run: yarn install --frozen-lockfile
+#       - run: yarn test
 
   deploy:
     name: Deploy to firebase
