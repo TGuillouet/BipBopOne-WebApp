@@ -35,6 +35,10 @@ export function getProjectDetail(userId, projectId) {
     });
 }
 
+export function updateProjectDetail(userId, projectId, updatedInfos) {
+    return firestore.collection("users").doc(userId).collection("projects").doc(projectId).update(updatedInfos)
+}
+
 /**
  * Fetch the user's project assets
  * @param userId The user id in the database
@@ -98,5 +102,7 @@ export function getDocumentsFromSnapshot(snapshot) {
 
     return documents;
 }
+
+
 
 

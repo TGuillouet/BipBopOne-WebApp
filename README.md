@@ -33,4 +33,4 @@ Pour accéder au projet par un navigateur, aller sur http://localhost:3000
 # Dépendences du projet
 
 Framework CSS: https://bulma.io
-
+https://couds.github.io/react-bulma-components/?path=/story/box--default

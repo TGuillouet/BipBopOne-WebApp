@@ -4,7 +4,7 @@ import { Table } from "../Table";
 import IntroProject from './IntroProject';
 import ProjectDescription from "./ProjectDescription";
 
-import { getProjectDetail, getProjectAssets } from "../../services/projects/projectsSevice";
+import { getProjectDetail, getProjectAssets, updateProjectDetail } from "../../services/projects/projectsSevice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -40,6 +40,13 @@ class ProjectView extends Component {
         );
     };
 
+    updateProjectInfo = async (projectData) => {
+        console.log(projectData);
+        console.log(this.props.context.user.uid);
+        console.log(this.props.match.params.id);
+        await updateProjectDetail(this.props.context.user.uid, this.props.match.params.id, projectData);
+
+    };
 
     async componentDidMount() {
         const user = this.props.context.user;
@@ -57,7 +64,7 @@ class ProjectView extends Component {
                         <div class="hero-body">
                             <div class="container">
 
-                                <IntroProject projectInfo={this.state.projectInfo} />
+                                <IntroProject projectInfo={this.state.projectInfo} onSubmit={this.updateProjectInfo}/>
 
                                 <section class="section">
                                     <figure class="image is-4by3">
