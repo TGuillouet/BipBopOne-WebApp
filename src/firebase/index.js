@@ -3,16 +3,27 @@ import 'firebase/storage';
 import 'firebase/firestore';
 import 'firebase/auth';
 
+const {
+	REACT_APP_FIREBASE_API_KEY,
+	REACT_APP_FIREBASE_AUTH_DOMAIN,
+	REACT_APP_FIREBASE_DATABASE_URL,
+	REACT_APP_FIREBASE_PROJECT_ID,
+	REACT_APP_FIREBASE_STORAGE_BUCKET,
+	REACT_APP_FIREBASE_MESSENGING_SENDER_ID,
+	REACT_APP_FIREBASE_APP_ID,
+	REACT_APP_FIREBASE_MEASUREMENT_ID
+} = process.env;
+
 // Initialize Firebase
-var config = {
-  apiKey: "AIzaSyCMlrIrTbCIIoi6JYaFDUtSAhlviGW3_i0",
-  authDomain: "bipbopone.firebaseapp.com",
-  databaseURL: "https://bipbopone.firebaseio.com",
-  projectId: "bipbopone",
-  storageBucket: "bipbopone.appspot.com",
-  messagingSenderId: "195975559874",
-  appId: "1:195975559874:web:ad3b60fdbc060f2ba2995b",
-  measurementId: "G-CPYT7VBBDD"
+const config = {
+	apiKey: REACT_APP_FIREBASE_API_KEY,
+	authDomain: REACT_APP_FIREBASE_AUTH_DOMAIN,
+	databaseURL: REACT_APP_FIREBASE_DATABASE_URL,
+	projectId: REACT_APP_FIREBASE_PROJECT_ID,
+	storageBucket: REACT_APP_FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: REACT_APP_FIREBASE_MESSENGING_SENDER_ID,
+	appId: REACT_APP_FIREBASE_APP_ID,
+	measurementId: REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 firebase.initializeApp(config);
 
@@ -20,6 +31,4 @@ const storage = firebase.storage(); // fichier
 const firestore = firebase.firestore(); // data base
 const auth = firebase.auth(); // data base
 
-export {
-    storage, firestore, auth, firebase as default
-}
+export { storage, firestore, auth, firebase as default };
