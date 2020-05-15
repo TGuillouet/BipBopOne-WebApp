@@ -31,14 +31,10 @@ jobs:
         run: yarn install --frozen-lockfile
       
       - name: Building the app on staging
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/feature/ci'
         run: yarn build
         env:
           CI: "false"
-      
-      - name: Building the app on production
-        if: github.ref == 'refs/heads/master'
-        run: yarn build
 
       - name: Deploy in staging
         if: github.ref == 'refs/heads/feature/ci'
