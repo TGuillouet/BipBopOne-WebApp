@@ -45,7 +45,7 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:dashboard 
+          args: deploy --project staging --only hosting:dashboard 
         env:
           CI: "false"
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
