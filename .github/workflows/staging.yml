@@ -1,25 +1,25 @@
-name: CI/CD
+name: Staging
 
 on:
   push:
     branches:
-      - feature/ci
+      - develop
 
 jobs:
-  # test:
-  #   name: Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: "12.x"
-  #     - run: yarn install --frozen-lockfile
-  #     - run: yarn test
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
 
   deploy:
     name: Deploy to firebase (staging)
-    # needs: test
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,14 +30,12 @@ jobs:
       - name: Installing dependencies
         run: yarn install --frozen-lockfile
       
-      - name: Building the app on staging
-        if: github.ref == 'refs/heads/feature/ci'
+      - name: Build
         run: yarn build
         env:
           CI: "false"
 
-      - name: Deploy in staging
-        if: github.ref == 'refs/heads/feature/ci'
+      - name: Deploy
         uses: w9jds/firebase-action@master
         with:
           args: deploy --project staging --only hosting:dashboard 
