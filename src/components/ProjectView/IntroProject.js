@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import PropTypes from 'prop-types'
 
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function IntroProject(props) {
 
-    const {register, handleSubmit, errors, setValue} = useForm({
+    const {register, errors, setValue} = useFormContext({
         mode: "onBlur",
     });
 
@@ -21,7 +21,7 @@ function IntroProject(props) {
 
 
     return (
-        <form onSubmit={handleSubmit(props.onSubmit)}>
+        <div>
             <div>
                 <input class="input is-large" type="text" ref={register({ required: true })} name="name" placeholder="Title" />
                 <p className="has-text-danger">{errors.name && 'Ce champ est requis'}</p>
@@ -56,9 +56,8 @@ function IntroProject(props) {
                         </div>
                     </div>
                 </div>
-                <button className="button is-primary is-block" type="submit">Save</button>
             </nav>
-        </form>
+        </div>
 
     )
 }
