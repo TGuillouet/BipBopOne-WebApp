@@ -1,0 +1,52 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
+
+  deploy:
+    name: Deploy to firebase
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+
+      - name: Installing dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Building the app on production
+        if: github.ref == 'refs/heads/master'
+        run: yarn build
+
+      - name: Deploy on production
+        if: github.ref == 'refs/heads/master'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --project bipbopone-prod --only hosting:dashboard
+        env:
+          CI: "true"
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          REACT_APP_FIREBASE_API_KEY: ${{ secrets.PRODUCTION_FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.PRODUCTION_FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.PRODUCTION_FIREBASE_DATABASE_URL }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.PRODUCTION_FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.PRODUCTION_FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSENGING_SENDER_ID: ${{ secrets.PRODUCTION_FIREBASE_MESSENGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APP_ID: ${{ secrets.PRODUCTION_FIREBASE_MESSENGING_SENDER_ID }}
+          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.PRODUCTION_FIREBASE_MESSENGING_SENDER_ID }}

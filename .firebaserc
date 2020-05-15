@@ -8,6 +8,19 @@
       "hosting": {
         "dashboard": [
           "dashboard-bipbopone"
+        ],
+        "webar": [
+          "bipbopone"
+        ]
+      }
+    },
+    "bipbopone-prod": {
+      "hosting": {
+        "webar": [
+          "bipbopone"
+        ],
+        "dashboard": [
+          "dashboard-bipbopone"
         ]
       }
     }
