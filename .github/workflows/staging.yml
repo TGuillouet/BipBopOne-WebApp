@@ -41,7 +41,7 @@ jobs:
         run: yarn build
 
       - name: Deploy in staging
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/feature/ci'
         uses: w9jds/firebase-action@master
         with:
           args: deploy --project staging --only hosting:dashboard 
