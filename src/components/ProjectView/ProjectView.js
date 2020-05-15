@@ -9,10 +9,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { withUserContext } from "../../contexts/UserContext";
 
-let user = {};
 class ProjectView extends Component {
     state = {
-        projectInfo: [],
+        projectInfo: {},
         projectAssets: [],
     };
 

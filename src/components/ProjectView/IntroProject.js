@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import PropTypes from 'prop-types'
 
 import { useFormContext } from "react-hook-form";
@@ -9,15 +9,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function IntroProject(props) {
 
-    const {register, errors, setValue} = useFormContext({
+    const { register, errors, setValue } = useFormContext({
         mode: "onBlur",
     });
 
     useEffect(() => {
         setValue([
-          { name: props.projectInfo.name }
+            { name: props.projectInfo.name }
         ])
-      }, [props.projectInfo.name]);
+    }, [props.projectInfo.name]);
 
 
     return (
@@ -63,10 +63,11 @@ function IntroProject(props) {
 }
 
 IntroProject.propTypes = {
-    projectInfo: PropTypes.object
-  }
-  IntroProject.defaultProps = {
+    projectInfo: PropTypes.object,
+
+}
+IntroProject.defaultProps = {
     projectInfo: {}
-  }
+}
 
 export default IntroProject
