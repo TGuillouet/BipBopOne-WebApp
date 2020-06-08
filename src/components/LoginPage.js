@@ -1,64 +1,69 @@
-import React from "react"
+import React, { useState } from "react"
 import {useForm} from "react-hook-form"
 import {auth} from "./../firebase"
 import {useUserPreferencies} from "../hooks/useUserPreferencies"
 
-/**
- * 
- * @param {String} value 
- * @returns {Boolean}
- */
-function validatePassword (value){
-    console.log(value.length>=8&&hasCapitalizedCharacters(value)&&hasNumberCharacters(value)&&new RegExp(/[!@#$%^&*(),.?":{}|<>]/).test(value))
-    return value.length>=8&&hasCapitalizedCharacters(value)&&hasNumberCharacters(value)&&new RegExp(/[!@#$%^&*(),.?":{}|<>]/).test(value)
-}
-function hasCharacterInRange (str, start, end) {
-    for(let charCode=start; charCode<=end; charCode++){
-        if (str.includes(String.fromCharCode(charCode)))
-        return true
+const formErrors = {
+    mail: {
+        pattern: "Votre adresse email est invalide",
+        required: "Ce champ est requis"
+    },
+    password: {
+        validate: "Votre mot de passe est invaide",
+        required: "Ce champ est requis"
     }
-    return false
 }
-/**
- * 
- * @param {String} str 
- * @returns {Boolean}
- */
-function hasCapitalizedCharacters (str) {
-    const CAPITALIZED_A_CHARCODE=65
-    const CAPITALIZED_Z_CHARCODE=90
-    return hasCharacterInRange(str, CAPITALIZED_A_CHARCODE, CAPITALIZED_Z_CHARCODE )
+
+const authErrorMessages = {
+    "auth/wrong-password": "Ce mot de passe ne correspond pas à cette adresse email",
+    "auth/network-request-failed": "Une erreur de réseau s'est produite, veuillez vérifier votre connexion internet",
+    "auth/too-many-requests": "Notre serveur est surchargé, veuiillez réessayer plus tard"
 }
-function hasNumberCharacters (str) {
-    const NUMBER_0_CHARCODE=48
-    const NUMBER_9_CHARCODE=57
-    return hasCharacterInRange(str, NUMBER_0_CHARCODE, NUMBER_9_CHARCODE )
-}
+
 /**
  * 
  */
 function LoginPage () {
-    const {register, handleSubmit, errors} = useForm()
-    const {getCookie, setCookie} = useUserPreferencies()
-    function onSubmit (data){
-        auth.signInWithEmailAndPassword(data.mail, data.password); // Automatic login
+    const {getRememberUsernameCookie, setRememberUsernameCookie} = useUserPreferencies();
+    const username = getRememberUsernameCookie();
 
-        console.log(data)
-        console.log(errors)
+    const [formError, setFormError] = useState(null);
+    const {register, handleSubmit, errors} = useForm({
+        defaultValues: {
+            mail: username
+        }
+    })
+
+    async function onSubmit (data) {
+        try {
+            await auth.signInWithEmailAndPassword(data.mail, data.password);
+            setRememberUsernameCookie(data.mail);
+        } catch(error) {
+            setFormError(authErrorMessages[error.code]);
+        }
     }
     
 
-
     return(
-        <div>
-            <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <input name="mail" ref={register({required:true, pattern:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/})} type="text"/>
-                    <p className="has-text-danger">{errors.mail?.type}</p>
-                    <input name="password" ref={register({required:true, validate: validatePassword})} type="text"/>
-                    <p className="has-text-danger">{errors.password?.type}</p>
-                    <input type="submit"/>
-                </form> 
+        <div className="content">
+            <div style={{ height: "100vh" }} className="columns is-desktop is-vcentered is-centered">
+                <div className="box column is-three-fifths table-container">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        {formError && <p style={{ display: "flex", justifyContent: "center" }} className="has-text-danger" >{formError}</p>}
+                        <label>Email:</label>
+                        <input name="mail" className="input" ref={register({required:true, pattern:/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/})} type="text"/>
+                        <p className="has-text-danger">{formErrors.mail[errors.mail?.type]}</p>
+                        
+                        <label>Mot de passe:</label>
+                        <input name="password" className="input" ref={register({required:true})} type="password"/>
+                        <p className="has-text-danger">{formErrors.password[errors.password?.type]}</p>
+                        
+                        <div style={{ display: "flex", justifyContent: "space-between" }} >
+                            <a>Pas de compte ? Ça se passe ici !</a>
+                            <input className="button" type="submit"/>
+                        </div>
+                    </form> 
+                </div>
             </div>
         </div>
     )
