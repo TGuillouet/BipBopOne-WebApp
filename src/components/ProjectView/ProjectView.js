@@ -1,19 +1,17 @@
 import React, { Component } from "react";
 
 import { Table } from "../Table";
-import IntroProject from './IntroProject';
-import ProjectDescription from "./ProjectDescription";
+import ProjectInfos from "./ProjectInfos";
 
 import { getProjectDetail, getProjectAssets, updateProjectDetail } from "../../services/projects/projectsSevice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import {withUserContext} from "../../contexts/UserContext";
+import { withUserContext } from "../../contexts/UserContext";
 
-let user = {};
 class ProjectView extends Component {
     state = {
-        projectInfo: [],
+        projectInfo: {},
         projectAssets: [],
     };
 
@@ -34,18 +32,10 @@ class ProjectView extends Component {
             <tr key={id}>
                 <td>{name}</td>
                 <td>{new Date(created_at.seconds).toString()}</td>
-                <td>{(visible)?<FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}</td>
+                <td>{(visible) ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}</td>
                 <td><button class="button"><FontAwesomeIcon icon={faTrashAlt} /></button></td>
             </tr>
         );
-    };
-
-    updateProjectInfo = async (projectData) => {
-        console.log(projectData);
-        console.log(this.props.context.user.uid);
-        console.log(this.props.match.params.id);
-        await updateProjectDetail(this.props.context.user.uid, this.props.match.params.id, projectData);
-
     };
 
     async componentDidMount() {
@@ -63,15 +53,11 @@ class ProjectView extends Component {
                     <section class="hero is-fullheight">
                         <div class="hero-body">
                             <div class="container">
-
-                                <IntroProject projectInfo={this.state.projectInfo} onSubmit={this.updateProjectInfo}/>
-
-                                <section class="section">
-                                    <figure class="image is-4by3">
-                                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
-                                    </figure>
-                                </section>
-                                <ProjectDescription desc={this.state.projectInfo.description} />
+                                <ProjectInfos
+                                    projectInfo={this.state.projectInfo}
+                                    userId={this.props.context.user.uid}
+                                    projectId={this.props.match.params.id}
+                                />
                             </div>
                         </div>
                     </section>
