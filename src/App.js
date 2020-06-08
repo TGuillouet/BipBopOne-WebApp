@@ -26,13 +26,13 @@ function App() {
             }
         });
 
-    }, [auth, setUser]);
+    }, [setUser]);
 
     return (
         <div className="root columns">
             <UserContext.Provider value={{ user, setUser }}>
                 <Router history={history}>
-                    <div className="column is-1">
+                    <div style={{ paddingBottom: 0, maxWidth: "80px" }} className="column is-1">
                         <MenuView/>
                     </div>
                     <div className="column">
