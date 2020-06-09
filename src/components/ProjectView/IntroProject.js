@@ -15,10 +15,9 @@ function IntroProject(props) {
 
     useEffect(() => {
         setValue([
-            { name: props.projectInfo.name }
+            { name: props.projectInfo.name, state: props.projectInfo.state }
         ])
-    }, [props.projectInfo.name]);
-
+    }, [props.projectInfo.name,props.projectInfo.state]);
 
     return (
         <div>
@@ -47,7 +46,7 @@ function IntroProject(props) {
                     <div>
                         <div class="control">
                             <div class="select is-rounded">
-                                <select>
+                                <select ref={register({ required: true })} name="state">
                                     <option>En cours</option>
                                     <option>Validé</option>
                                     <option>Annulé</option>

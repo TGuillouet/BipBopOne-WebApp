@@ -11,9 +11,6 @@ function ProjectInfos(props) {
     const methods = useForm();
 
     const updateProjectInfo = async (projectData) => {
-        console.log(projectData);
-        console.log(props.userId);
-        console.log(props.projectId);
         await updateProjectDetail(props.userId, props.projectId, projectData);
 
     };
