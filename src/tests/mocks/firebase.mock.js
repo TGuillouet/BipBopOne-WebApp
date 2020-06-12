@@ -1,5 +1,7 @@
 import * as firebase from "firebase/app";
+import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 export let userProjectAssetsData = [
   {
@@ -113,6 +115,45 @@ const collections = {
     },
   }
 };
+
+jest.spyOn(firebase, "initializeApp").mockImplementation((options) => {
+  return {
+    auth: () => {
+      return {
+        onAuthStateChanged: jest.fn(() => {}),
+        signInWithEmailAndPassword: jest.fn((email, password) => {
+          return Promise.resolve({
+            displayName: "Mocked User",
+            uid: "mockedUid",
+            email: "test@email.com"
+          })
+        }),
+        currentUser: {
+          sendEmailVerification: jest.fn()
+        }
+      };
+    },
+    firestore: () => {},
+    storage: () => {}
+  }
+});
+
+jest.spyOn(firebase, "auth").mockImplementation(() => {
+  return {
+    currentUser: {
+      displayName: "Mocked User",
+      uid: "mockedUid",
+      email: "test@email.com",
+      emailVerified: true
+    }
+  }
+});
+
+jest.spyOn(firebase, "storage").mockImplementation(() => {
+  return {
+    ref: jest.fn()
+  };
+});
 
 jest.spyOn(firebase, "firestore").mockImplementation(() => {
   return {
