@@ -59,7 +59,7 @@ export function getProjectAssets(userId, projectId) {
  */
 export function createProjectAsset(userId, projectId, asset) {
     return firestore
-        .collection("user")
+        .collection("users")
         .doc(userId)
         .collection("projects")
         .doc(projectId)
@@ -76,7 +76,7 @@ export function createProjectAsset(userId, projectId, asset) {
  */
 export function deleteProjectAsset(userId, projectId, assetId) {
     return firestore
-        .collection("user")
+        .collection("users")
         .doc(userId)
         .collection("projects")
         .doc(projectId)
