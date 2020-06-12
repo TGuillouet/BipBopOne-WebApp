@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Table } from "../Table";
 import ProjectInfos from "./ProjectInfos";
 
-import { getProjectDetail, getProjectAssets, updateProjectDetail } from "../../services/projects/projectsSevice";
+import { getProjectDetail, getProjectAssets, updateProjectDetail, createProjectAsset } from "../../services/projects/projectsSevice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -13,8 +13,8 @@ class ProjectView extends Component {
     state = {
         projectInfo: {},
         projectAssets: [],
+        file: {},
     };
-
 
     generateRowComponentContact = (item) => {
         return (
@@ -32,7 +32,7 @@ class ProjectView extends Component {
             <tr key={id}>
                 <td>{name}</td>
                 <td>{new Date(created_at.seconds).toString()}</td>
-                <td>{(visible) ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}</td>
+                <td>{(visible) ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</td>
                 <td><button class="button"><FontAwesomeIcon icon={faTrashAlt} /></button></td>
             </tr>
         );
@@ -45,6 +45,20 @@ class ProjectView extends Component {
         const projectAssets = await getProjectAssets(user.uid, this.props.match.params.id);
         await this.setState({ projectInfo, projectAssets });
     }
+
+    handleChangeFile = e => { 
+        if (e.target.files[0]) {
+            if (e.target.files[0].name.split('.').pop() == "obj") {
+                this.setState({ file: e.target.files[0] })
+            }
+        }
+    }
+
+     handleAddFile = async () =>{
+        await createProjectAsset(this.props.context.user.uid, this.props.match.params.id,this.state.file)
+     }
+
+
 
     render() {
         return (
@@ -75,6 +89,9 @@ class ProjectView extends Component {
                                 items={this.state.projectAssets}
                                 render={this.generateRowComponentListAsset}
                             />
+                         
+                        <input type="file" onChange={this.handleChangeFile} accept=".obj"/>
+                        <button class="button is-primary" onClick={this.handleAddFile}>Upload</button>
                         </div>
                         <div class="BlockingContact">
                         </div>

@@ -25,7 +25,7 @@ function ProjectInfos(props) {
                     </figure>
                 </section>
                 <ProjectDescription desc={props.projectInfo.description} />
-                <button className="button is-primary is-block" type="submit">Save</button>
+                <button class="button is-primary is-block" type="submit">Save</button>
             </form>
         </FormContext>
 

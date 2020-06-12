@@ -1,4 +1,4 @@
-import { firestore } from "../../firebase";
+import firebase,{ firestore, storage } from "../../firebase";
 
 /**
  * Fetch the user's projects from the database
@@ -16,7 +16,7 @@ export function getUserProjects(userId) {
  * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>}
  */
 export function createProject(userId, project) {
-    return firestore.collection("users").doc(userId).collection("projects").add({...project, whitelist: [], nb_files: 0});
+    return firestore.collection("users").doc(userId).collection("projects").add({ ...project, whitelist: [], nb_files: 0 });
 }
 
 /**
@@ -27,7 +27,7 @@ export function createProject(userId, project) {
  */
 export function getProjectDetail(userId, projectId) {
     return firestore.collection("users").doc(userId).collection("projects").doc(projectId).get().then(doc => {
-        if(!doc.exists) {
+        if (!doc.exists) {
             throw new Error("This project do not exists");
         }
 
@@ -57,14 +57,36 @@ export function getProjectAssets(userId, projectId) {
  * @param asset The asset id in the database
  * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>}
  */
-export function createProjectAsset(userId, projectId, asset) {
-    return firestore
-        .collection("users")
-        .doc(userId)
-        .collection("projects")
-        .doc(projectId)
-        .collection("assets")
-        .add(asset);
+export function createProjectAsset(userId, projectId, file) {
+    const uploadTask = storage.ref(`${userId}/${projectId}/${file.name}`).put(file);
+    uploadTask.on(
+        "state_changed",
+        snapshot => { },
+        error => {
+            console.log(error);
+        },
+        () => {
+            storage
+                .ref(`${userId}/${projectId}`)
+                .child(file.name)
+                .getDownloadURL()
+                .then(url => {
+                    firestore
+                        .collection("users")
+                        .doc(userId)
+                        .collection("projects")
+                        .doc(projectId)
+                        .collection("assets")
+                        .add({
+                            name : file.name.split('.').shift(),
+                            model : url,
+                            visible : true,
+                            type : file.name.split('.').pop(),
+                            created_at : firebase.firestore.Timestamp.now()
+                        });
+                });
+        }
+    );
 }
 
 /**

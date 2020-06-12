@@ -23,7 +23,7 @@ function IntroProject(props) {
         <div>
             <div>
                 <input class="input is-large" type="text" ref={register({ required: true })} name="name" placeholder="Title" />
-                <p className="has-text-danger">{errors.name && 'Ce champ est requis'}</p>
+                <p class="has-text-danger">{errors.name && 'Ce champ est requis'}</p>
             </div>
             <nav class="level-left">
                 <div class="level-item has-text-centered">
