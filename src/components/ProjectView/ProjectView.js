@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Table } from "../Table";
 import ProjectInfos from "./ProjectInfos";
 
-import { getProjectDetail, getProjectAssets, updateProjectDetail, createProjectAsset } from "../../services/projects/projectsSevice";
+import { getProjectDetail, getProjectAssets, updateProjectDetail, createProjectAsset, deleteProjectAsset } from "../../services/projects/projectsSevice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -33,7 +33,18 @@ class ProjectView extends Component {
                 <td>{name}</td>
                 <td>{new Date(created_at.seconds).toString()}</td>
                 <td>{(visible) ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</td>
-                <td><button class="button"><FontAwesomeIcon icon={faTrashAlt} /></button></td>
+                <td>
+                    <button class="button">
+                        <FontAwesomeIcon
+                            icon={faTrashAlt}
+                            onClick={async () => {
+                                await deleteProjectAsset(this.props.context.user.uid, this.props.match.params.id, id)
+                                const projectAssets = await getProjectAssets(this.props.context.user.uid, this.props.match.params.id);
+                                await this.setState({ projectAssets });
+                            }
+                            } />
+                    </button>
+                </td>
             </tr>
         );
     };
@@ -46,7 +57,7 @@ class ProjectView extends Component {
         await this.setState({ projectInfo, projectAssets });
     }
 
-    handleChangeFile = e => { 
+    handleChangeFile = e => {
         if (e.target.files[0]) {
             if (e.target.files[0].name.split('.').pop() == "obj") {
                 this.setState({ file: e.target.files[0] })
@@ -54,9 +65,9 @@ class ProjectView extends Component {
         }
     }
 
-     handleAddFile = async () =>{
-        await createProjectAsset(this.props.context.user.uid, this.props.match.params.id,this.state.file)
-     }
+    handleAddFile = async () => {
+        await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, this.state.file)
+    }
 
 
 
@@ -89,9 +100,9 @@ class ProjectView extends Component {
                                 items={this.state.projectAssets}
                                 render={this.generateRowComponentListAsset}
                             />
-                         
-                        <input type="file" onChange={this.handleChangeFile} accept=".obj"/>
-                        <button class="button is-primary" onClick={this.handleAddFile}>Upload</button>
+
+                            <input type="file" onChange={this.handleChangeFile} accept=".obj" />
+                            <button class="button is-primary" onClick={this.handleAddFile}>Upload</button>
                         </div>
                         <div class="BlockingContact">
                         </div>
