@@ -4,7 +4,7 @@
 .idea/
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
 
@@ -27,5 +27,8 @@ yarn-error.log*
 
 # environment file
 .env
+
+# service account keys
+bbo-serviceaccount-*.json
 
 .firebase/
