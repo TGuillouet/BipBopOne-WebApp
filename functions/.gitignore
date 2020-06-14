@@ -1,0 +1,4 @@
+node_modules/
+
+# Excluding serviceaccount keys from the versionning
+*-serviceaccount-*.json
