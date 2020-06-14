@@ -52,41 +52,38 @@ export function getProjectAssets(userId, projectId) {
 
 /**
  * Create an asset in a user's project in the database
- * @param userId The user id in the database
- * @param projectId The project id in the database
- * @param asset The asset id in the database
+ * @param {String} userId The user id in the database
+ * @param {String} projectId The project id in the database
+ * @param {File} file The asset's file to insert
  * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>}
  */
-export function createProjectAsset(userId, projectId, file) {
-    const uploadTask = storage.ref(`${userId}/${projectId}/${file.name}`).put(file);
-    uploadTask.on(
-        "state_changed",
-        snapshot => { },
-        error => {
-            console.log(error);
-        },
-        () => {
-            storage
-                .ref(`${userId}/${projectId}`)
-                .child(file.name)
-                .getDownloadURL()
-                .then(url => {
-                    firestore
-                        .collection("users")
-                        .doc(userId)
-                        .collection("projects")
-                        .doc(projectId)
-                        .collection("assets")
-                        .add({
-                            name : file.name.split('.').shift(),
-                            model : url,
-                            visible : true,
-                            type : file.name.split('.').pop(),
-                            created_at : firebase.firestore.Timestamp.now()
-                        });
-                });
-        }
-    );
+export async function createProjectAsset(userId, projectId, file) {
+  // Create the document in the firestore database (to generate the firestore document id before the upload)
+  const assetDocument = firestore
+    .collection("users")
+    .doc(userId)
+    .collection("projects")
+    .doc(projectId)
+    .collection("assets")
+    .doc();
+
+  // Upload the file
+  const uploadTask = await storage.ref(`${userId}/${projectId}/${assetDocument.id}/${file.name}`).put(file);
+
+  // Get the url
+  const url = await uploadTask
+    .ref
+    .getDownloadURL();
+
+  // Set the firestore file data
+  await assetDocument
+    .set({
+        name : file.name.split('.').shift(),
+        model : url,
+        visible : true,
+        type : file.name.split('.').pop(),
+        created_at : firebase.firestore.Timestamp.now()
+    });
 }
 
 /**
