@@ -66,7 +66,8 @@ class ProjectView extends Component {
     }
 
     handleAddFile = async () => {
-        await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, this.state.file)
+        const tmp = await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, this.state.file);
+        await tmp ? alert("Fichier envoyé sauvegarder sur le serveur") : console.log("");
     }
 
 

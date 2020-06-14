@@ -84,6 +84,8 @@ export async function createProjectAsset(userId, projectId, file) {
         type : file.name.split('.').pop(),
         created_at : firebase.firestore.Timestamp.now()
     });
+
+    return uploadTask
 }
 
 /**
