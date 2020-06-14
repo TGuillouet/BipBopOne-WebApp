@@ -13,6 +13,7 @@ import './App.css';
 import 'bulma/css/bulma.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import LoginPage from './components/LoginPage';
+import ContactsPage from "./components/ContactsPage";
 
 const history = createBrowserHistory();
 
@@ -42,6 +43,7 @@ function App() {
                             }} />
                             <PrivateRoute isLogged={!!(user)} path="/projects" component={ProjectListView} />
                             <PrivateRoute isLogged={!!(user)} path="/detail/:id" component={ProjectView} />
+                            <PrivateRoute isLogged={!!(user)} path="/contacts" component={ContactsPage} />
                         </Switch>
                     </div>
                 </Router>

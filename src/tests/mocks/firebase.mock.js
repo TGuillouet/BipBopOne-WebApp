@@ -56,16 +56,12 @@ const user1ProjectsData = {
       nb_file: 1,
       state: "Validé"
     })
-  },
-  myTestId2: {
-    id: "myTestId2",
-    data: jest.fn().mockReturnValue({
-      name: "project2",
-      client_name: "CName2",
-      description: "myDescription",
-      nb_file: 0,
-      state: "Validé"
-    })
+  }
+}
+
+const user1ContactsData = {
+  userContact1: {
+
   }
 }
 
@@ -92,6 +88,32 @@ const user1Collections = {
           empty: user1ProjectsData.length === 0,
           forEach: jest.fn((callback) => {
             Object.values(user1ProjectsData).forEach((project) => {
+              callback(project);
+            });
+          })
+        })
+      )
+    }
+  },
+  contacts: {
+    doc: (docName) => {
+      return {
+        get: () => {
+          return (
+            Promise.resolve({
+              exists: true,
+              data: user1ProjectsData[docName].data
+            })
+          )
+        }
+      }
+    },
+    get: () => {
+      return (
+        Promise.resolve({
+          empty: user1ContactsData.length === 0,
+          forEach: jest.fn((callback) => {
+            Object.values(user1ContactsData).forEach((project) => {
               callback(project);
             });
           })
