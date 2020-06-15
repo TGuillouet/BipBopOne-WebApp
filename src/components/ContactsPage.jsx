@@ -3,7 +3,7 @@ import {TopProjectTableBar} from "./TopProjectTableBar";
 import {Table} from "./Table";
 
 import Modal from "./Modal/Modal";
-import ContactForm from "./ContactModal/ContactForm";
+import { ContactForm } from "./ContactForm";
 
 import {getUserContactsList, upsertContact} from "../services/contacts/contacts";
 import {withUserContext} from "../contexts/UserContext";
