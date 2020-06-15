@@ -58,12 +58,12 @@ function ContactsPage(props) {
   };
 
   const toggleCreateProjectModal = React.useCallback(() => {
-    if (createModalDisplayed && selectedContact !== null) {
-      setSelectedContact(null);
+    if (createModalDisplayed) {
+      setSelectedContact({});
     }
 
     setCreateModalDisplayed(!createModalDisplayed);
-  }, [createModalDisplayed, selectedContact]);
+  }, [createModalDisplayed]);
 
   const saveContact = async (contactData) => {
     try {

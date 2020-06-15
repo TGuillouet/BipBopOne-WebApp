@@ -19,15 +19,18 @@ export function upsertContact(userId, contactId, contactData) {
   const contactsRef = firestore
     .collection("users")
     .doc(userId)
-    .collection("contacts")
+    .collection("contacts");
 
-  if (contactData.id) {
+  const toInsert = { ...contactData };
+  delete toInsert["id"];
+
+  if (contactId) {
     return contactsRef
       .doc(contactId)
-      .set(contactData)
+      .set(toInsert);
   }
 
   return contactsRef
     .doc()
-    .set(contactData)
+    .set(contactData);
 }
