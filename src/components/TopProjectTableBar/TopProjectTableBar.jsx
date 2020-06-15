@@ -20,7 +20,7 @@ function TopProjectTableBar(props) {
         <div style={{ height: "5vh" }} className="level">
             <div className="level-left">
                 <div className="level-item">
-                    <button className="button is-primary" onClick={props.onLeftButtonClick}>Créer un projet</button>
+                    <button className="button is-primary" onClick={props.onLeftButtonClick}>{props.leftButtonLabel}</button>
                 </div>
             </div>
             <div className="level-right">
@@ -42,6 +42,7 @@ function TopProjectTableBar(props) {
 }
 
 TopProjectTableBar.propTypes = {
+    leftButtonLabel: PropTypes.string.isRequired,
     onLeftButtonClick: PropTypes.func.isRequired,
     onResearch: PropTypes.func.isRequired
 };

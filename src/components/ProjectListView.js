@@ -71,7 +71,7 @@ class ProjectListView extends Component {
             <div className="content root">
                 <div style={{ height: "100vh" }} className="columns is-desktop is-vcentered is-centered">
                     <div style={{ height: "70vh" }}  className="box column is-four-fifths table-container">
-                        <TopProjectTableBar onLeftButtonClick={this.toggleCreateProjectModal} onResearch={this.onResearch} />
+                        <TopProjectTableBar leftButtonLabel="Créer un projet" onLeftButtonClick={this.toggleCreateProjectModal} onResearch={this.onResearch} />
                         <Table
                             isLoading={this.state.isLoading}
                             items={this.state.filteredProjects}
