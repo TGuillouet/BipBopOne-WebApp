@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { Table } from "../Table";
+import { MyLoader } from "../Loader";
 import ProjectInfos from "./ProjectInfos";
 
 import { getProjectDetail, getProjectAssets, updateProjectDetail, createProjectAsset, deleteProjectAsset } from "../../services/projects/projectsSevice";
@@ -14,6 +15,7 @@ class ProjectView extends Component {
         projectInfo: {},
         projectAssets: [],
         file: {},
+        Loading : false,
     };
 
     generateRowComponentContact = (item) => {
@@ -66,14 +68,15 @@ class ProjectView extends Component {
     }
 
     handleAddFile = async () => {
+        this.setState({Loading : true})
         const tmp = await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, this.state.file);
-        await tmp ? alert("Fichier envoyé sauvegarder sur le serveur") : console.log("");
+        await tmp ? this.setState({Loading : false}) : console.log("");
     }
 
 
 
     render() {
-        return (
+        return (this.state.Loading ? <MyLoader/> : (
             <div class="columns is-gapless">
                 <div class="column is-5">
                     <section class="hero is-fullheight">
@@ -110,7 +113,7 @@ class ProjectView extends Component {
                     </section>
                 </div>
             </div>
-        )
+        ))
     }
 }
 
