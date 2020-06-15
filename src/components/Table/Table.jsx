@@ -32,7 +32,7 @@ Table.propTypes = {
 };
 
 
-Table.defaultProps = { 
+Table.defaultProps = {
     items: [],
     render: ()=>{}
 }
