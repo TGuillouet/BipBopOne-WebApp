@@ -20,6 +20,11 @@ const assetTrigger = functions.firestore.document("users/{user_id}/projects/{pro
     return;
   }
 
+  // Update the number of files
+  await change.after.ref.update({
+    nb_files: admin.firestore.FieldValue.increment(1)
+  })
+
   await admin
     .firestore()
     .collection("assets")
