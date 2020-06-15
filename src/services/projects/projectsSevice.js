@@ -1,4 +1,4 @@
-import { firestore, storage } from "../../firebase";
+import firebase, { firestore, storage } from "../../firebase";
 import {getDocumentsFromSnapshot} from "../../helpers/firestore";
 
 /**
@@ -83,7 +83,7 @@ export async function createProjectAsset(userId, projectId, file) {
         model : url,
         visible : true,
         type : file.name.split('.').pop(),
-        created_at : firestore.Timestamp.now()
+        created_at : firebase.firestore.Timestamp.now()
     });
 
     return uploadTask
