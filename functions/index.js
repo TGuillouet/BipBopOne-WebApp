@@ -21,9 +21,15 @@ const assetTrigger = functions.firestore.document("users/{user_id}/projects/{pro
   }
 
   // Update the number of files
-  await change.after.ref.update({
-    nb_files: admin.firestore.FieldValue.increment(1)
-  })
+  await admin
+    .firestore()
+    .collection("users")
+    .doc(context.params.user_id)
+    .collection("projects")
+    .doc(context.params.project_id)
+    .update({
+      nb_files: admin.firestore.FieldValue.increment(1)
+    })
 
   await admin
     .firestore()
@@ -40,6 +46,16 @@ async function deleteAsset(user_id, project_id, asset_id) {
     await admin.storage().bucket().deleteFiles({
       directory: `${user_id}/${project_id}/${asset_id}`
     })
+
+    await admin
+      .firestore()
+      .collection("users")
+      .doc(user_id)
+      .collection("projects")
+      .doc(project_id)
+      .update({
+        nb_files: admin.firestore.FieldValue.increment(-1)
+      })
 
     await admin
       .firestore()
