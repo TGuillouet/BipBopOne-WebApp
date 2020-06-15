@@ -1,8 +1,11 @@
 import React from "react";
 import {TopProjectTableBar} from "./TopProjectTableBar";
 import {Table} from "./Table";
+
 import Modal from "./Modal/Modal";
-import {getUserContactsList} from "../services/contacts/contacts";
+import ContactForm from "./ContactModal/ContactModal";
+
+import {getUserContactsList, upsertContact} from "../services/contacts/contacts";
 import {withUserContext} from "../contexts/UserContext";
 
 function ContactsPage(props) {
@@ -11,6 +14,11 @@ function ContactsPage(props) {
   const [ isLoading, setLoadingState ] = React.useState(false);
   const [ contacts, setContacts ] = React.useState([]);
   const [ filteredContacts, setFilteredContacts ] = React.useState([]);
+  const [ selectedContact, setSelectedContact ] = React.useState({});
+
+  React.useEffect(() => {
+    fetchData();
+  }, [props.context.user.uid, setContacts]);
 
   async function fetchData() {
     // Fetch les contacts de l'utilisateur
@@ -20,20 +28,20 @@ function ContactsPage(props) {
 
     // Set la liste des contacts de l'utilisateur dans le state
     setContacts(contacts);
-    // setFilteredContacts(contacts);
+    setFilteredContacts(contacts);
 
-    setLoadingState(false);
+    setLoadingState(false)
   }
 
-  React.useEffect(() => {
-    fetchData();
-  });
-
   const onRowClick = React.useCallback((id) => {
-    return () => {
-      console.log(id);
+    return async () => {
+      const contact = contacts.find((contact) => contact.id === id);
+
+      await setSelectedContact({ ...contact, id })
+
+      setCreateModalDisplayed(true);
     }
-  }, []);
+  }, [contacts]);
 
   const onResearch = (research) => {
     setFilteredContacts(contacts.filter((contact) => contact.first_name.includes(research) || contact.last_name.includes(research)));
@@ -50,8 +58,26 @@ function ContactsPage(props) {
   };
 
   const toggleCreateProjectModal = React.useCallback(() => {
+    if (createModalDisplayed && selectedContact !== null) {
+      setSelectedContact(null);
+    }
+
     setCreateModalDisplayed(!createModalDisplayed);
-  }, [createModalDisplayed, setCreateModalDisplayed]);
+  }, [createModalDisplayed, selectedContact]);
+
+  const saveContact = async (contactData) => {
+    try {
+      await upsertContact(props.context.user.uid, contactData.id, contactData)
+
+      setSelectedContact({});
+
+      setCreateModalDisplayed(false);
+
+      fetchData();
+    } catch(error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="content root">
@@ -60,13 +86,13 @@ function ContactsPage(props) {
           <TopProjectTableBar leftButtonLabel="Créer un contact" onLeftButtonClick={toggleCreateProjectModal} onResearch={onResearch} />
           <Table
             isLoading={isLoading}
-            items={contacts}
+            items={filteredContacts}
             render={generateRowComponent}
           />
         </div>
       </div>
       <Modal isActive={createModalDisplayed} onClose={toggleCreateProjectModal}>
-        {/*<CreateProjectForm onSubmit={this.createProject} />*/}
+        <ContactForm data={selectedContact} onSubmit={saveContact} />
       </Modal>
     </div>
   )
