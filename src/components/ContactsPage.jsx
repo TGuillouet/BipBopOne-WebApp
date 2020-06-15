@@ -16,11 +16,7 @@ function ContactsPage(props) {
   const [ filteredContacts, setFilteredContacts ] = React.useState([]);
   const [ selectedContact, setSelectedContact ] = React.useState({});
 
-  React.useEffect(() => {
-    fetchData();
-  }, [props.context.user.uid, setContacts]);
-
-  async function fetchData() {
+  const fetchData = React.useCallback(async () => {
     // Fetch les contacts de l'utilisateur
     setLoadingState(true);
 
@@ -31,7 +27,11 @@ function ContactsPage(props) {
     setFilteredContacts(contacts);
 
     setLoadingState(false)
-  }
+  }, [props.context.user.uid]);
+
+  React.useEffect(() => {
+    fetchData();
+  }, [fetchData, props.context.user.uid, setContacts]);
 
   const onRowClick = React.useCallback((id) => {
     return async () => {
