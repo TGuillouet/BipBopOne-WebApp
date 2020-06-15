@@ -14,3 +14,20 @@ export function getUserContactsList(userId) {
     .get()
     .then(getDocumentsFromSnapshot)
 }
+
+export function upsertContact(userId, contactId, contactData) {
+  const contactsRef = firestore
+    .collection("users")
+    .doc(userId)
+    .collection("contacts")
+
+  if (contactData.id) {
+    return contactsRef
+      .doc(contactId)
+      .set(contactData)
+  }
+
+  return contactsRef
+    .doc()
+    .set(contactData)
+}
