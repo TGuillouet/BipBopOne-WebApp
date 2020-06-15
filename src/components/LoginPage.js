@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import {useForm} from "react-hook-form"
 import {auth} from "./../firebase"
 import {useUserPreferencies} from "../hooks/useUserPreferencies"
+import {W3C_EMAIL_REGEXP} from "../helpers/Regexp";
 
 const formErrors = {
     mail: {
@@ -21,7 +22,7 @@ const authErrorMessages = {
 }
 
 /**
- * 
+ *
  */
 function LoginPage () {
     const {getRememberUsernameCookie, setRememberUsernameCookie} = useUserPreferencies();
@@ -42,7 +43,7 @@ function LoginPage () {
             setFormError(authErrorMessages[error.code]);
         }
     }
-    
+
 
     return(
         <div className="content">
@@ -51,18 +52,18 @@ function LoginPage () {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         {formError && <p style={{ display: "flex", justifyContent: "center" }} className="has-text-danger" >{formError}</p>}
                         <label>Email:</label>
-                        <input name="mail" className="input" ref={register({required:true, pattern:/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/})} type="text"/>
+                        <input name="mail" className="input" ref={register({required:true, pattern: W3C_EMAIL_REGEXP})} type="text"/>
                         <p className="has-text-danger">{formErrors.mail[errors.mail?.type]}</p>
-                        
+
                         <label>Mot de passe:</label>
                         <input name="password" className="input" ref={register({required:true})} type="password"/>
                         <p className="has-text-danger">{formErrors.password[errors.password?.type]}</p>
-                        
+
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
                             <a>Pas de compte ? Ça se passe ici !</a>
                             <input className="button" type="submit"/>
                         </div>
-                    </form> 
+                    </form>
                 </div>
             </div>
         </div>
