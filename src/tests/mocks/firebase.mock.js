@@ -2,6 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+import "firebase/performance";
 
 export let userProjectAssetsData = [
   {
@@ -159,7 +160,8 @@ jest.spyOn(firebase, "initializeApp").mockImplementation((options) => {
       };
     },
     firestore: () => {},
-    storage: () => {}
+    storage: () => {},
+    performance: () => {}
   }
 });
 
@@ -185,6 +187,12 @@ jest.spyOn(firebase, "storage").mockImplementation(() => {
     })
   };
 });
+
+jest.spyOn(firebase, "performance").mockImplementation(() => {
+  return {
+    trace: jest.fn((name) => {})
+  }
+})
 
 jest.spyOn(firebase, "firestore").mockImplementation(() => {
   return {
