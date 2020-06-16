@@ -37,7 +37,6 @@ export function getProjectDetail(userId, projectId) {
 }
 
 export function updateProjectDetail(userId, projectId, updatedInfos) {
-    console.log(updatedInfos);
     return firestore.collection("users").doc(userId).collection("projects").doc(projectId).update(updatedInfos)
 }
 
