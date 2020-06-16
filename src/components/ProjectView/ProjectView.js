@@ -53,7 +53,7 @@ class ProjectView extends Component {
                loading: true
             });
 
-            const [ projectInfo, projectAssets ] = await Promise.all([
+            const [ projectInfo, projectAssets,userContacts ] = await Promise.all([
                 getProjectDetail(user.uid, this.props.match.params.id),
                 getProjectAssets(user.uid, this.props.match.params.id),
                 getUserContactsList(user.uid)
