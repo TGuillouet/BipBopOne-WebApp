@@ -25,20 +25,22 @@ const authErrorMessages = {
  *
  */
 function LoginPage () {
-    const {getRememberUsernameCookie, setRememberUsernameCookie} = useUserPreferencies();
+    const {getRememberUsernameCookie, setRememberUsernameCookie, clearRememberedUsername} = useUserPreferencies();
     const username = getRememberUsernameCookie();
 
     const [formError, setFormError] = useState(null);
     const {register, handleSubmit, errors} = useForm({
         defaultValues: {
-            mail: username
+            mail: username,
+            remember: username.length > 0
         }
     })
 
     async function onSubmit (data) {
         try {
             await auth.signInWithEmailAndPassword(data.mail, data.password);
-            setRememberUsernameCookie(data.mail);
+            if (data.remember) setRememberUsernameCookie(data.mail);
+            else clearRememberedUsername();
         } catch(error) {
             setFormError(authErrorMessages[error.code]);
         }
@@ -59,8 +61,12 @@ function LoginPage () {
                         <input name="password" className="input" ref={register({required:true})} type="password"/>
                         <p className="has-text-danger">{formErrors.password[errors.password?.type]}</p>
 
-                        <div style={{ display: "flex", justifyContent: "space-between" }} >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} >
                             <a>Pas de compte ? Ça se passe ici !</a>
+                            <label className="checkbox">
+                                <input name="remember" type="checkbox" ref={register} />
+                                <span style={{ marginLeft: "10px" }}>Se souvenir de moi</span>
+                            </label>
                             <input className="button" type="submit"/>
                         </div>
                     </form>
