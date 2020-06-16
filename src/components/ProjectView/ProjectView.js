@@ -17,10 +17,17 @@ class ProjectView extends Component {
         projectInfo: {},
         projectAssets: [],
         file: {},
-        Loading: false,
+        loading : false,
     };
 
 
+    handleAssetDelete = (id) => {
+        return async () => {
+            await deleteProjectAsset(this.props.context.user.uid, this.props.match.params.id, id)
+            const projectAssets = await getProjectAssets(this.props.context.user.uid, this.props.match.params.id);
+            await this.setState({ projectAssets });
+        }
+    }
 
 
     generateRowComponentListAsset = ({ id, name, created_at, visible }) => {
@@ -28,17 +35,10 @@ class ProjectView extends Component {
             <tr key={id}>
                 <td>{name}</td>
                 <td>{new Date(created_at.seconds).toString()}</td>
-                <td>{(visible) ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</td>
+                <td>{<FontAwesomeIcon icon={(visible)?  faEye: faEyeSlash} />}</td>
                 <td>
-                    <button class="button">
-                        <FontAwesomeIcon
-                            icon={faTrashAlt}
-                            onClick={async () => {
-                                await deleteProjectAsset(this.props.context.user.uid, this.props.match.params.id, id)
-                                const projectAssets = await getProjectAssets(this.props.context.user.uid, this.props.match.params.id);
-                                await this.setState({ projectAssets });
-                            }
-                            } />
+                    <button className="button" onClick={this.handleAssetDelete(id)}>
+                        <FontAwesomeIcon icon={faTrashAlt} />
                     </button>
                 </td>
             </tr>
@@ -46,38 +46,56 @@ class ProjectView extends Component {
     };
 
     async componentDidMount() {
-        const user = this.props.context.user;
-        const userContacts = await getUserContactsList(user.uid)
-        const projectInfo = await getProjectDetail(user.uid, this.props.match.params.id);
-        const projectAssets = await getProjectAssets(user.uid, this.props.match.params.id);
-        await this.setState({ projectInfo, projectAssets, userContacts });
+        try {
+            const { user } = this.props.context;
+
+            this.setState({
+               loading: true
+            });
+
+            const [ projectInfo, projectAssets ] = await Promise.all([
+                getProjectDetail(user.uid, this.props.match.params.id),
+                getProjectAssets(user.uid, this.props.match.params.id),
+                getUserContactsList(user.uid)
+            ]);
+
+            this.setState({
+                projectInfo,
+                projectAssets,
+                userContacts,
+                loading: false
+            });
+        } catch(e) {
+            console.error(e)
+        }
     }
 
     handleChangeFile = e => {
         if (e.target.files[0]) {
-            if (e.target.files[0].name.split('.').pop() == "obj") {
+            if (e.target.files[0].name.split('.').pop() === "obj") {
                 this.setState({ file: e.target.files[0] })
             }
         }
     }
 
     handleAddFile = async () => {
-        this.setState({ Loading: true })
+        this.setState({ loading: true })
         const tmp = await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, this.state.file);
-        await tmp ? this.setState({ Loading: false }) : console.log("");
+        await tmp ? this.setState({ loading: false }) : console.log("");
     }
 
-
-
     render() {
-        return (this.state.Loading ? <MyLoader /> : (
-            <div class="columns is-gapless">
-                <div class="column is-5">
-                    <section class="hero is-fullheight">
-                        <div class="hero-body">
-                            <div class="container">
+        return (
+          this.state.loading ?
+            <MyLoader/> : (
+            <div className="columns">
+                <div className="column is-5">
+                    <section className="hero is-fullheight">
+                        <div className="hero-body">
+                            <div className="container">
                                 <ProjectInfos
                                     projectInfo={this.state.projectInfo}
+                                    projectAssets={this.state.projectAssets}
                                     userId={this.props.context.user.uid}
                                     projectId={this.props.match.params.id}
                                 />
@@ -95,16 +113,16 @@ class ProjectView extends Component {
                                 projectId={this.props.match.params.id}
                             />
                         </div>
-                        <div class="FichierProjet">
+                        <div className="FichierProjet">
                             <Table
                                 items={this.state.projectAssets}
                                 render={this.generateRowComponentListAsset}
                             />
 
                             <input type="file" onChange={this.handleChangeFile} accept=".obj" />
-                            <button class="button is-primary" onClick={this.handleAddFile}>Upload</button>
+                            <button className="button is-primary" onClick={this.handleAddFile}>Upload</button>
                         </div>
-                        <div class="BlockingContact">
+                        <div className="BlockingContact">
                         </div>
                     </section>
                 </div>

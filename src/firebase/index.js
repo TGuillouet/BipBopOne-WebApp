@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/storage';
 import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/performance';
 
 const {
 	REACT_APP_FIREBASE_API_KEY,
@@ -30,5 +31,6 @@ firebase.initializeApp(config);
 const storage = firebase.storage(); // fichier
 const firestore = firebase.firestore(); // data base
 const auth = firebase.auth(); // data base
+const performance = firebase.performance();
 
-export { storage, firestore, auth, firebase as default };
+export { performance, storage, firestore, auth, firebase as default };

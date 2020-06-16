@@ -22,19 +22,19 @@ function IntroProject(props) {
     return (
         <div>
             <div>
-                <input class="input is-large" type="text" ref={register({ required: true })} name="name" placeholder="Title" />
-                <p class="has-text-danger">{errors.name && 'Ce champ est requis'}</p>
+                <input className="input is-large" type="text" ref={register({ required: true })} name="name" placeholder="Title" />
+                <p className="has-text-danger">{errors.name && 'Ce champ est requis'}</p>
             </div>
-            <nav class="level-left">
-                <div class="level-item has-text-centered">
+            <nav className="level-left">
+                <div className="level-item has-text-centered">
                     <div>
-                        <nav class="level-left">
-                            <div class="level-item has-text-centered">
+                        <nav className="level-left">
+                            <div className="level-item has-text-centered">
                                 <div>
                                     <p>{(props.projectInfo.whitelist || []).length}</p>
                                 </div>
                             </div>
-                            <div class="level-item has-text-centered">
+                            <div className="level-item has-text-centered">
                                 <div>
                                     <FontAwesomeIcon icon={faEye} />
                                 </div>
@@ -42,11 +42,11 @@ function IntroProject(props) {
                         </nav>
                     </div>
                 </div>
-                <div class="level-item has-text-centered">
+                <div className="level-item has-text-centered">
                     <div>
-                        <div class="control">
-                            <div class="select is-rounded">
-                                <select ref={register({ required: true })} name="state">
+                        <div className="control">
+                            <div className="select is-rounded">
+                                <select ref={register({ required: true })} defaultValue={props.projectInfo.state} name="state">
                                     <option>En cours</option>
                                     <option>Validé</option>
                                     <option>Annulé</option>
