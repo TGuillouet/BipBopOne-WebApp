@@ -8,7 +8,7 @@ import { updateProjectDetail } from "../../services/projects/projectsSevice";
 
 function ContactProject(props) {
 
-    const { handleSubmit, register, errors } = useForm();
+    const { handleSubmit, register, errors, reset } = useForm();
 
     const generateRowComponentContact = (item) => {
         return (
@@ -21,8 +21,9 @@ function ContactProject(props) {
     };
 
     const onSubmit = async value => {
-        props.whitelist.push(value.email)   
-        await updateProjectDetail(props.userId, props.projectId, {whitelist :  props.whitelist})
+        props.whitelist.push(value.email)
+        await updateProjectDetail(props.userId, props.projectId, { whitelist: props.whitelist })
+        reset({ values: { email: "" } });
     }
     return (
         <div>
