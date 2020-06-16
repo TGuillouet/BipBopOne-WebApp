@@ -2,12 +2,13 @@ import React, { Component } from "react";
 
 import { Table } from "../Table";
 import { MyLoader } from "../Loader";
+import ContactProject from "./ContactProject";
 import ProjectInfos from "./ProjectInfos";
 
-import { getProjectDetail, getProjectAssets, updateProjectDetail, createProjectAsset, deleteProjectAsset } from "../../services/projects/projectsSevice";
+import { getProjectDetail, getProjectAssets, createProjectAsset, deleteProjectAsset } from "../../services/projects/projectsSevice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faEye, faEyeSlash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { withUserContext } from "../../contexts/UserContext";
 
 class ProjectView extends Component {
@@ -15,18 +16,10 @@ class ProjectView extends Component {
         projectInfo: {},
         projectAssets: [],
         file: {},
-        Loading : false,
+        Loading: false,
     };
 
-    generateRowComponentContact = (item) => {
-        return (
-            <tr>
-                <td style={{ verticalAlign: "middle" }}>{item}</td>
-                <td><button class="button">Bloquer</button></td>
-                <td><button class="button">Ajouter contact</button></td>
-            </tr>
-        );
-    };
+
 
 
     generateRowComponentListAsset = ({ id, name, created_at, visible }) => {
@@ -68,15 +61,15 @@ class ProjectView extends Component {
     }
 
     handleAddFile = async () => {
-        this.setState({Loading : true})
+        this.setState({ Loading: true })
         const tmp = await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, this.state.file);
-        await tmp ? this.setState({Loading : false}) : console.log("");
+        await tmp ? this.setState({ Loading: false }) : console.log("");
     }
 
 
 
     render() {
-        return (this.state.Loading ? <MyLoader/> : (
+        return (this.state.Loading ? <MyLoader /> : (
             <div class="columns is-gapless">
                 <div class="column is-5">
                     <section class="hero is-fullheight">
@@ -94,9 +87,10 @@ class ProjectView extends Component {
                 <div class="column">
                     <section class="is-fullheight">
                         <div class="ContactProjet">
-                            <Table
-                                items={this.state.projectInfo.whitelist}
-                                render={this.generateRowComponentContact}
+                            <ContactProject
+                                whitelist={this.state.projectInfo.whitelist}
+                                userId={this.props.context.user.uid}
+                                projectId={this.props.match.params.id}
                             />
                         </div>
                         <div class="FichierProjet">
