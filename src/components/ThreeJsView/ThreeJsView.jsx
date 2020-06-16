@@ -1,17 +1,35 @@
 import React from "react";
+import PropTypes from "prop-types";
+import ThreeJsWrapper from "../../helpers/ThreeJsWrapper";
 
-function ThreeJsView(props) {
-  const reference = React.createRef();
+const wrapper = new ThreeJsWrapper();
 
-  React.useEffect(() => {
-    return () => {
+class ThreeJsView extends React.Component {
+  constructor(props) {
+    super(props);
 
-    }
-  });
+    this.ref = React.createRef();
+  }
 
-  return (
-    <div ref={reference} />
-  )
+  componentDidMount() {
+    if (this.props.objectUrl) wrapper.load(this.ref.current, this.props.objectUrl);
+  }
+
+  render() {
+    return (
+      <div ref={this.ref} style={{ width: "700px", height: "500px" }} />
+    );
+  }
 }
 
-export default 3DView;
+ThreeJsView.propTypes = {
+  objectUrl: PropTypes.string,
+  materialUrl: PropTypes.string
+};
+
+ThreeJsView.defaultProps = {
+  objectUrl: null,
+  materialUrl: null
+};
+
+export default ThreeJsView;
