@@ -21,8 +21,11 @@ export function upsertContact(userId, contactId, contactData) {
     .doc(userId)
     .collection("contacts");
 
-  const toInsert = { ...contactData };
-  delete toInsert["id"];
+  const toInsert = {
+    first_name: contactData.first_name,
+    last_name: contactData.last_name,
+    email: contactData.email
+  };
 
   if (contactId) {
     return contactsRef
@@ -32,5 +35,5 @@ export function upsertContact(userId, contactId, contactData) {
 
   return contactsRef
     .doc()
-    .set(contactData);
+    .set(toInsert);
 }
