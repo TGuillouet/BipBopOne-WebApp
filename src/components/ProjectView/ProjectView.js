@@ -6,13 +6,14 @@ import ContactProject from "./ContactProject";
 import ProjectInfos from "./ProjectInfos";
 
 import { getProjectDetail, getProjectAssets, createProjectAsset, deleteProjectAsset } from "../../services/projects/projectsSevice";
-
+import { getUserContactsList } from "../../services/contacts/contacts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEye, faEyeSlash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { withUserContext } from "../../contexts/UserContext";
 
 class ProjectView extends Component {
     state = {
+        userContacts: {},
         projectInfo: {},
         projectAssets: [],
         file: {},
@@ -46,10 +47,10 @@ class ProjectView extends Component {
 
     async componentDidMount() {
         const user = this.props.context.user;
-
+        const userContacts = await getUserContactsList(user.uid)
         const projectInfo = await getProjectDetail(user.uid, this.props.match.params.id);
         const projectAssets = await getProjectAssets(user.uid, this.props.match.params.id);
-        await this.setState({ projectInfo, projectAssets });
+        await this.setState({ projectInfo, projectAssets, userContacts });
     }
 
     handleChangeFile = e => {
@@ -88,6 +89,7 @@ class ProjectView extends Component {
                     <section class="is-fullheight">
                         <div class="ContactProjet">
                             <ContactProject
+                                userContacts={this.state.userContacts}
                                 whitelist={this.state.projectInfo.whitelist}
                                 userId={this.props.context.user.uid}
                                 projectId={this.props.match.params.id}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +14,7 @@ function ContactProject(props) {
     const { handleSubmit, register, errors, reset } = useForm();
 
     const [createModalDisplayed, setCreateModalDisplayed] = React.useState(false);
+    const [selectedContact, setSelectedContact] = React.useState("");
 
     const generateRowComponentContact = (item) => {
         return (
@@ -21,13 +22,14 @@ function ContactProject(props) {
                 <td style={{ verticalAlign: "middle" }}>{item}</td>
                 <td><button class="button">Bloquer</button></td>
                 <td>
-                    <button class="button is-primary" onClick={() => setCreateModalDisplayed(true)}>
+                    <button class="button is-primary" disabled={props.userContacts.map(contact => contact.email).includes(item)} onClick={() => {
+                        console.log(item);
+                        setSelectedContact(item)
+                        setCreateModalDisplayed(true)
+                    }}>
                         <FontAwesomeIcon icon={faUserPlus} />
                     </button>
                 </td>
-                <Modal isActive={createModalDisplayed} onClose={toggleCloseModal}>
-                    <ContactForm data={{ email: item, first_name: "", last_name: "" }} onSubmit={saveContact} />
-                </Modal>
             </tr>
         );
     };
@@ -35,6 +37,7 @@ function ContactProject(props) {
     const saveContact = async (contactData) => {
         try {
             await upsertContact(props.userId, contactData.id, contactData)
+            setSelectedContact("");
             setCreateModalDisplayed(false);
         } catch (error) {
             console.error(error);
@@ -52,6 +55,11 @@ function ContactProject(props) {
         setCreateModalDisplayed(!createModalDisplayed);
     }, [createModalDisplayed]);
 
+    const handleDebug = async () => {
+        console.log(
+
+        );
+    }
 
     return (
         <div>
@@ -73,6 +81,10 @@ function ContactProject(props) {
                 items={props.whitelist}
                 render={generateRowComponentContact}
             />
+            <Modal isActive={createModalDisplayed} onClose={toggleCloseModal}>
+                <ContactForm data={{ email: selectedContact, first_name: "", last_name: "" }} onSubmit={saveContact} />
+            </Modal>
+            <button onClick={handleDebug}>debug</button>
         </div>
     )
 }
