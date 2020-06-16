@@ -10,9 +10,9 @@ export let userProjectAssetsData = [
       model: "modelUrl",
       material: "materialUrl",
       name: "assetName",
-      projectId: "myTestId",
       type: "obj",
-      visible: true
+      visible: true,
+      created_at: "16/06/2020 10:00:00"
     })
   }
 ]
@@ -21,6 +21,9 @@ const user1ProjectCollections = {
   assets: {
     doc: (docName) => {
       return {
+        set: jest.fn((data) => {
+          userProjectAssetsData.push({ id: docName, data: jest.fn().mockReturnValue(data) })
+        }),
         delete: () => {
           userProjectAssetsData = userProjectAssetsData.filter((asset) => asset.id !== docName);
           return Promise.resolve();
@@ -173,7 +176,13 @@ jest.spyOn(firebase, "auth").mockImplementation(() => {
 
 jest.spyOn(firebase, "storage").mockImplementation(() => {
   return {
-    ref: jest.fn()
+    ref: jest.fn().mockReturnValue({
+      put: jest.fn().mockReturnValue({
+        ref: {
+          getDownloadURL: jest.fn().mockReturnValue("mockedUrl")
+        }
+      })
+    })
   };
 });
 
@@ -190,3 +199,6 @@ jest.spyOn(firebase, "firestore").mockImplementation(() => {
   };
 })
 
+firebase.firestore.Timestamp = {
+  now: jest.fn().mockReturnValue("16/06/2020 10:00:00")
+}

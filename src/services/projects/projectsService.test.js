@@ -15,7 +15,7 @@ describe('Test all the queries to the user projects', function () {
     test('Test if we can access to the user projects', async function(done) {
         const projects = await getUserProjects("user1");
 
-        expect(projects.length).toBe(2);
+        expect(projects.length).toBe(1);
         done()
     });
 
@@ -37,24 +37,28 @@ describe('Test all the queries to the user projects', function () {
     test('Test if we can access to the user projects assets', async function(done) {
         const projectAssetsList = await getProjectAssets("user1", "myTestId");
 
-        expect(projectAssetsList).toHaveLength(2);
+        expect(projectAssetsList).toHaveLength(1);
         done();
     });
 
     test('Test if we can create a user projects assets', async function(done) {
-        const asset = {
-            model: "modelUrl",
-            material: "materialUrl",
+        const file = {
+            name: "assetName.obj"
+        }
+
+        const expectedAsset = {
+            model: "mockedUrl",
             name: "assetName",
-            projectId: "myTestId",
+            // projectId: "myTestId",
             type: "obj",
-            visible: true
+            visible: true,
+            created_at: "16/06/2020 10:00:00"
         };
 
-        const data = await createProjectAsset("user1", "myTestId", asset);
+        await createProjectAsset("user1", "myTestId", file);
 
-        expect(data).toEqual(asset);
         expect(mock.userProjectAssetsData).toHaveLength(2);
+        expect(mock.userProjectAssetsData.pop().data()).toEqual(expectedAsset);
         done();
     });
 
@@ -62,7 +66,7 @@ describe('Test all the queries to the user projects', function () {
         await deleteProjectAsset("user1", "myTestId", "myAssetId");
 
         // The mock.userProjectAssetsData keep the element added in the "Test if we can create a user projects assets" test
-        expect(mock.userProjectAssetsData).toHaveLength(1);
+        expect(mock.userProjectAssetsData).toHaveLength(0);
         done();
     });
 });
