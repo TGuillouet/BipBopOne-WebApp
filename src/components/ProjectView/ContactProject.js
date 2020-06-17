@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { Table } from "../Table";
 
-import { updateProjectDetail } from "../../services/projects/projectsSevice";
+import { updateProjectDetail,getProjectAssets } from "../../services/projects/projectsSevice";
 import { upsertContact } from "../../services/contacts/contacts";
 import Modal from "../Modal/Modal";
 import { ContactForm } from "../ContactForm";
@@ -15,15 +15,25 @@ function ContactProject(props) {
 
     const [createModalDisplayed, setCreateModalDisplayed] = React.useState(false);
     const [selectedContact, setSelectedContact] = React.useState("");
+    const [whiteListProject, setwhiteListProject] = React.useState(props.whitelist);
 
     const generateRowComponentContact = (item) => {
         return (
             <tr>
                 <td style={{ verticalAlign: "middle" }}>{item}</td>
-                <td><button class="button">Bloquer</button></td>
+                <td>
+                    <button class="button" onClick={async () => {
+                        setSelectedContact(item)
+                        await updateProjectDetail(props.userId, props.projectId, {
+                            whitelist: whiteListProject.filter(e => e !== selectedContact)
+                        })
+                        setwhiteListProject(whiteListProject.filter(e => e !== selectedContact))
+                    }}>
+                        Bloquer
+                    </button>
+                </td>
                 <td>
                     <button class="button is-primary" disabled={props.userContacts.map(contact => contact.email).includes(item)} onClick={() => {
-                        console.log(item);
                         setSelectedContact(item)
                         setCreateModalDisplayed(true)
                     }}>
@@ -45,8 +55,8 @@ function ContactProject(props) {
     };
 
     const onSubmit = async value => {
-        props.whitelist.push(value.email)
-        await updateProjectDetail(props.userId, props.projectId, { whitelist: props.whitelist })
+        whiteListProject.push(value.email)
+        await updateProjectDetail(props.userId, props.projectId, { whitelist: whiteListProject })
         reset({ values: { email: "" } });
     }
 
@@ -57,7 +67,10 @@ function ContactProject(props) {
 
     const handleDebug = async () => {
         console.log(
-
+            props.whitelist
+        );
+        console.log(
+            whiteListProject
         );
     }
 
@@ -78,7 +91,7 @@ function ContactProject(props) {
                 <button class="button is-primary" type="submit">+ Add</button>
             </form>
             <Table
-                items={props.whitelist}
+                items={whiteListProject}
                 render={generateRowComponentContact}
             />
             <Modal isActive={createModalDisplayed} onClose={toggleCloseModal}>

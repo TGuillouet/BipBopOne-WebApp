@@ -15,8 +15,8 @@ function ProjectInfos(props) {
         await updateProjectDetail(props.userId, props.projectId, projectData);
     };
 
-  const objectUrl = props.projectAssets[0]?.model ?? null
-  const materialUrl = props.projectAssets[0]?.material ?? null
+  const objectUrl = props.projectAssets[0]?.model ?? null;
+  const materialUrl = props.projectAssets[0]?.material ?? null;
 
   return (
       <FormContext {...methods} >
