@@ -11,13 +11,19 @@ class ThreeJsView extends React.Component {
     this.ref = React.createRef();
   }
 
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    console.log(nextProps.objectUrl !== this.props.objectUrl)
+    return nextProps.objectUrl !== this.props.objectUrl;
+  }
+
   componentDidMount() {
+    console.log("Asset name:", this.props.objectUrl)
     if (this.props.objectUrl) wrapper.load(this.ref.current, this.props.objectUrl);
   }
 
   render() {
     return (
-      <div ref={this.ref} style={{ width: "700px", height: "500px" }} />
+      <div ref={this.ref} style={{ width: "90%", height: "500px" }} />
     );
   }
 }

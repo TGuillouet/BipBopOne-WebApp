@@ -18,8 +18,8 @@ function ProjectDescription(props) {
 
     return (
         <section>
-            <div className="container">
-                <h1 className="title">Description</h1>
+            <div className="field">
+                <label className="label">Description</label>
                 <textarea className="textarea has-fixed-size" placeholder="Description du projet..."  ref={register({ required: true })} name="description"/>
             </div>
         </section>

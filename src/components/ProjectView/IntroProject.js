@@ -6,29 +6,28 @@ import { useFormContext } from "react-hook-form";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 function IntroProject(props) {
 
     const { register, errors, setValue } = useFormContext({
-        mode: "onBlur",
+        mode: "onChange",
     });
 
     useEffect(() => {
         setValue([
             { name: props.projectInfo.name, state: props.projectInfo.state }
         ])
-    }, [props.projectInfo.name,props.projectInfo.state]);
+    }, [props.projectInfo.name, props.projectInfo.state, setValue]);
 
     return (
-        <div>
+        <div className="column">
             <div>
-                <input className="input is-large" type="text" ref={register({ required: true })} name="name" placeholder="Title" />
+                <input className="input is-medium" type="text" ref={register({ required: true })} name="name" placeholder="Title" />
                 <p className="has-text-danger">{errors.name && 'Ce champ est requis'}</p>
             </div>
-            <nav className="level-left">
+            <nav className="level-right" style={{ paddingTop: "1rem" }}>
                 <div className="level-item has-text-centered">
                     <div>
-                        <nav className="level-left">
+                        <div className="pt-2 level-right">
                             <div className="level-item has-text-centered">
                                 <div>
                                     <p>{(props.projectInfo.whitelist || []).length}</p>
@@ -39,7 +38,7 @@ function IntroProject(props) {
                                     <FontAwesomeIcon icon={faEye} />
                                 </div>
                             </div>
-                        </nav>
+                        </div>
                     </div>
                 </div>
                 <div className="level-item has-text-centered">
@@ -47,9 +46,10 @@ function IntroProject(props) {
                         <div className="control">
                             <div className="select is-rounded">
                                 <select ref={register({ required: true })} defaultValue={props.projectInfo.state} name="state">
-                                    <option>En cours</option>
-                                    <option>Validé</option>
-                                    <option>Annulé</option>
+                                    <option value="En cours">En cours</option>
+                                    <option value="En attente">En attente</option>
+                                    <option value="Terminé">Terminé</option>
+                                    <option value="Annulé">Annulé</option>
                                 </select>
                             </div>
                         </div>

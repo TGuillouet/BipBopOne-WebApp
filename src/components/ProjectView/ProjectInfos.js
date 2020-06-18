@@ -12,24 +12,27 @@ function ProjectInfos(props) {
     const methods = useForm();
 
     const updateProjectInfo = async (projectData) => {
-        await updateProjectDetail(props.userId, props.projectId, projectData);
+      await updateProjectDetail(props.userId, props.projectId, projectData);
     };
 
-  const objectUrl = props.projectAssets[0]?.model ?? null;
-  const materialUrl = props.projectAssets[0]?.material ?? null;
+    const asset = props.projectAssets.find((a) => a.id === props.selectedRenderedAssetId);
+    const objectUrl = asset?.model ?? null;
+    const materialUrl = asset?.material ?? null;
 
-  return (
-      <FormContext {...methods} >
-          <form onSubmit={methods.handleSubmit(updateProjectInfo)}>
-              <IntroProject projectInfo={props.projectInfo}/>
-              <section className="section">
-                  <ThreeJsView objectUrl={objectUrl} materialUrl={materialUrl} />
-              </section>
-              <ProjectDescription desc={props.projectInfo.description} />
-              <button className="button is-primary is-block" type="submit">Save</button>
-          </form>
-      </FormContext>
-  )
+    return (
+        <FormContext {...methods} >
+            <form onSubmit={methods.handleSubmit(updateProjectInfo)}>
+                <IntroProject projectInfo={props.projectInfo}/>
+                <section className="section" style={{ display: "flex", justifyContent: "center", padding: 20 }}>
+                    <ThreeJsView objectUrl={objectUrl} materialUrl={materialUrl} />
+                </section>
+                <ProjectDescription desc={props.projectInfo.description} />
+                <div>
+                  <button className="button is-primary is-pulled-right" type="submit">Save</button>
+                </div>
+            </form>
+        </FormContext>
+    )
 }
 
 export default ProjectInfos

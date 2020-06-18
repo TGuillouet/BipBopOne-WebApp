@@ -27,7 +27,7 @@ function ContactProject(props) {
 
     const generateRowComponentContact = (item) => {
         return (
-            <tr>
+            <tr key={item}>
                 <td style={{ verticalAlign: "middle" }}>{item}</td>
                 <td style={{ display: "flex", justifyContent: "space-around" }}>
                   <button className="button" onClick={async () => {

@@ -105,3 +105,16 @@ export function deleteProjectAsset(userId, projectId, assetId) {
         .doc(assetId)
         .delete();
 }
+
+export function changeAssetVisibility(userId, projectId, assetId, newVisibility) {
+  return firestore
+    .collection("users")
+    .doc(userId)
+    .collection("projects")
+    .doc(projectId)
+    .collection("assets")
+    .doc(assetId)
+    .update({
+      visible: newVisibility
+    });
+}
