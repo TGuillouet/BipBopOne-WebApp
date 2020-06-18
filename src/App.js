@@ -1,13 +1,14 @@
 import React from 'react';
 
-import {MenuView} from './components/MenuView';
+import { MenuView } from './components/MenuView';
 import ProjectView from './components/ProjectView/ProjectView';
 import ProjectListView from "./components/ProjectListView";
 
-import {auth} from "./firebase";
+import { auth } from "./firebase";
 import UserContext from "./contexts/UserContext";
-import {createBrowserHistory} from "history";
-import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
+import { createBrowserHistory } from "history";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { Modal } from "./components/Modal";
 
 import 'bulma/css/bulma.css';
 import './App.css';
@@ -18,7 +19,8 @@ import ContactsPage from "./components/ContactsPage";
 const history = createBrowserHistory();
 
 function App() {
-    const [ user, setUser ] = React.useState(null);
+    const [user, setUser] = React.useState(null);
+    const [createModalDisplayed, setCreateModalDisplayed] = React.useState(false);
 
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -28,12 +30,21 @@ function App() {
         });
     }, [setUser]);
 
+    const toggleCloseModal = React.useCallback(() => {
+        setCreateModalDisplayed(!createModalDisplayed);
+    }, [createModalDisplayed]);
+
     return (
         <div className="root columns">
+            <div class="bugreport">
+                <button onClick={() => setCreateModalDisplayed(true)}>
+                    <h2>Bug report</h2>
+                </button>
+            </div>
             <UserContext.Provider value={{ user, setUser }}>
                 <Router history={history}>
                     <div style={{ paddingBottom: 0, maxWidth: "80px" }} className="column is-1">
-                        <MenuView/>
+                        <MenuView />
                     </div>
                     <div className="column">
                         <Switch>
@@ -47,6 +58,19 @@ function App() {
                     </div>
                 </Router>
             </UserContext.Provider>
+            <Modal isActive={createModalDisplayed} onClose={toggleCloseModal}>
+                <article class="message is-info">
+                    <div class="message-header">
+                        <p>Bug report</p>
+                    </div>
+                    <div class="message-body">
+                    <p>
+                    Bonjour à toi !
+                    </p>
+                     Le site est encore en Beta donc si tu as trouvé un bug à nous faire remonter merci de nous envoyer un mail à <strong>support.prod@bipbopone.fr</strong>
+                    </div>
+                </article>
+            </Modal>
         </div>
     )
 }
@@ -56,8 +80,8 @@ const PrivateRoute = ({ component: Component, ...otherProps }) => {
         otherProps.isLogged ? (
             <Component {...props} />
         ) : (
-            <Redirect to={{ pathname: "/" }} />
-        )
+                <Redirect to={{ pathname: "/" }} />
+            )
     return (
         <Route
             {...otherProps}

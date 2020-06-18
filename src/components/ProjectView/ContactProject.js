@@ -6,7 +6,7 @@ import { Table } from "../Table";
 
 import { updateProjectDetail,getProjectAssets } from "../../services/projects/projectsSevice";
 import { upsertContact } from "../../services/contacts/contacts";
-import Modal from "../Modal/Modal";
+import {Modal} from "../Modal";
 import { ContactForm } from "../ContactForm";
 import {W3C_EMAIL_REGEXP} from "../../helpers/Regexp";
 
