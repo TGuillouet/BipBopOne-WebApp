@@ -6,7 +6,7 @@ function Table(props) {
     const rows = props.items.map(props.render)
 
     return ((props.isLoading) ? <MyLoader /> : (
-        <table className='table is-striped is-hoverable'>
+        <table className='table is-striped is-hoverable' style={{ overflowY: "visible" }}>
             <tbody>
                 {rows}
             </tbody>

@@ -9,8 +9,8 @@ import UserContext from "./contexts/UserContext";
 import {createBrowserHistory} from "history";
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 
-import './App.css';
 import 'bulma/css/bulma.css';
+import './App.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import LoginPage from './components/LoginPage';
 import ContactsPage from "./components/ContactsPage";
@@ -26,7 +26,6 @@ function App() {
                 setUser(user);
             }
         });
-
     }, [setUser]);
 
     return (

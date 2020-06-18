@@ -1,3 +1,11 @@
+/* ====== BULMA OVERWRITES ====== */
+
+.is-primary {
+    background-color: black !important;
+}
+
+/* ====== END BULMA OVERWRITES ====== */
+
 .center{
     text-align: center;
 }
@@ -10,9 +18,17 @@
     height: 25vh;
 }
 
+.ContactProjet > table {
+    width: 100%;
+}
+
 .FichierProjet{
     max-height: 50vh;
     height: 50vh;
+}
+
+.FichierProjet > table {
+    width: 100%;
 }
 
 .BlockingContact{

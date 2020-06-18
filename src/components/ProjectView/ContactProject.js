@@ -8,6 +8,14 @@ import { updateProjectDetail,getProjectAssets } from "../../services/projects/pr
 import { upsertContact } from "../../services/contacts/contacts";
 import Modal from "../Modal/Modal";
 import { ContactForm } from "../ContactForm";
+import {W3C_EMAIL_REGEXP} from "../../helpers/Regexp";
+
+const formErrors = {
+  email: {
+    pattern: "Cette adresse email est invalide",
+    required: "Ce champ est requis"
+  }
+}
 
 function ContactProject(props) {
 
@@ -21,24 +29,22 @@ function ContactProject(props) {
         return (
             <tr>
                 <td style={{ verticalAlign: "middle" }}>{item}</td>
-                <td>
-                    <button class="button" onClick={async () => {
-                        setSelectedContact(item)
-                        await updateProjectDetail(props.userId, props.projectId, {
-                            whitelist: whiteListProject.filter(e => e !== selectedContact)
-                        })
-                        setwhiteListProject(whiteListProject.filter(e => e !== selectedContact))
-                    }}>
-                        Bloquer
-                    </button>
-                </td>
-                <td>
-                    <button class="button is-primary" disabled={props.userContacts.map(contact => contact.email).includes(item)} onClick={() => {
-                        setSelectedContact(item)
-                        setCreateModalDisplayed(true)
-                    }}>
-                        <FontAwesomeIcon icon={faUserPlus} />
-                    </button>
+                <td style={{ display: "flex", justifyContent: "space-around" }}>
+                  <button className="button" onClick={async () => {
+                    setSelectedContact(item)
+                    await updateProjectDetail(props.userId, props.projectId, {
+                      whitelist: whiteListProject.filter(e => e !== selectedContact)
+                    })
+                    setwhiteListProject(whiteListProject.filter(e => e !== selectedContact))
+                  }}>
+                    Bloquer
+                  </button>
+                  <button className="button is-primary" disabled={props.userContacts.map(contact => contact.email).includes(item)} onClick={() => {
+                    setSelectedContact(item)
+                    setCreateModalDisplayed(true)
+                  }}>
+                    <FontAwesomeIcon icon={faUserPlus} />
+                  </button>
                 </td>
             </tr>
         );
@@ -65,39 +71,29 @@ function ContactProject(props) {
         setCreateModalDisplayed(!createModalDisplayed);
     }, [createModalDisplayed]);
 
-    const handleDebug = async () => {
-        console.log(
-            props.whitelist
-        );
-        console.log(
-            whiteListProject
-        );
-    }
-
     return (
-        <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="ContactProjet box">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <p className="has-text-danger">{formErrors.email[errors.email?.type]}</p>
+            <div className="field has-addons">
+              <div className="control">
                 <input
-                    name="email"
-                    ref={register({
-                        required: "Required",
-                        pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                            message: "invalid email address"
-                        }
-                    })}
-                />
-                {errors.email && errors.email.message}
-                <button class="button is-primary" type="submit">+ Add</button>
-            </form>
-            <Table
-                items={whiteListProject}
-                render={generateRowComponentContact}
-            />
-            <Modal isActive={createModalDisplayed} onClose={toggleCloseModal}>
-                <ContactForm data={{ email: selectedContact, first_name: "", last_name: "" }} onSubmit={saveContact} />
-            </Modal>
-            <button onClick={handleDebug}>debug</button>
+                  className="input is-half"
+                  name="email"
+                  ref={register({ required: true, pattern: W3C_EMAIL_REGEXP })} />
+              </div>
+              <div className="control">
+                <button className="button is-primary" type="submit">Ajouter</button>
+              </div>
+            </div>
+          </form>
+          <Table
+            items={whiteListProject}
+            render={generateRowComponentContact}
+          />
+          <Modal isActive={createModalDisplayed} onClose={toggleCloseModal}>
+              <ContactForm data={{ email: selectedContact, first_name: "", last_name: "" }} onSubmit={saveContact} />
+          </Modal>
         </div>
     )
 }

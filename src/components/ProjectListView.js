@@ -25,7 +25,17 @@ class ProjectListView extends Component {
     fetchProjectList = async (userId) => {
         await this.setState({ isLoading: true })
         const projects = await getUserProjects(userId);
-        await this.setState({ projects, filteredProjects: projects, isLoading: false });
+
+        const getProjects = Promise.resolve(projects).then((i) => {
+            const res = []
+            for(let a = 0; a <= 50; a++) {
+                res.push(i[0])
+            }
+            return res;
+        });
+
+        // await this.setState({ projects, filteredProjects: projects, isLoading: false });
+        await this.setState({ projects, filteredProjects: await getProjects, isLoading: false });
     };
 
     generateRowComponent = ({ id, name, client_name, state, whitelist, nb_files }) => {
