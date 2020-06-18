@@ -11,24 +11,31 @@ class ThreeJsView extends React.Component {
     this.ref = React.createRef();
   }
 
+  /**
+   * The component should update only if the object url change
+   * @param nextProps
+   * @param nextState
+   * @param nextContext
+   * @return {boolean}
+   */
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     return nextProps.objectUrl !== this.props.objectUrl;
   }
 
   componentDidMount() {
-    wrapper.initializeScene(this.ref.current)
-    if (this.props.objectUrl) wrapper.load(this.props.objectUrl);
+    wrapper.initializeScene(this.ref.current); // Initialize the three.js scene
+    if (this.props.objectUrl) wrapper.load(this.props.objectUrl); // Load the object from the url
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    wrapper.unload()
+    wrapper.unload() // Unload the previous object
     if (this.props.objectUrl) {
-      wrapper.load(this.props.objectUrl);
+      wrapper.load(this.props.objectUrl); // Load the new one
     }
   }
 
   componentWillUnmount() {
-    wrapper.unloadAll();
+    wrapper.unloadAll(); // Dispose of the scene and the renderer
   }
 
   render() {
