@@ -23,7 +23,11 @@ function ContactProject(props) {
 
     const [createModalDisplayed, setCreateModalDisplayed] = React.useState(false);
     const [selectedContact, setSelectedContact] = React.useState("");
-    const [whiteListProject, setwhiteListProject] = React.useState(props.whitelist);
+    const [whiteListProject, setwhiteListProject] = React.useState([]);
+
+    React.useEffect(() => {
+      setwhiteListProject(props.whitelist);
+    }, [props.whitelist])
 
     const generateRowComponentContact = (item) => {
         return (
@@ -55,6 +59,7 @@ function ContactProject(props) {
             await upsertContact(props.userId, contactData.id, contactData)
             setSelectedContact("");
             setCreateModalDisplayed(false);
+            props.onContactAdded();
         } catch (error) {
             console.error(error);
         }

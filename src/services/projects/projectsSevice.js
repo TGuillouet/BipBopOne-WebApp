@@ -1,4 +1,4 @@
-import firebase, { firestore, storage } from "../../firebase";
+import firebase, {firestore, storage} from "../../firebase";
 import {getDocumentsFromSnapshot} from "../../helpers/firestore";
 
 /**
@@ -56,7 +56,7 @@ export function getProjectAssets(userId, projectId) {
  * @param {String} projectId The project id in the database
  * @param {File} model The asset's file to insert
  * @param {File | null} material The asset's material to insert
- * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>}
+ * @returns {Promise<firebase.storage.UploadTaskSnapshot>}
  */
 export async function createProjectAsset(userId, projectId, model, material) {
   // Create the document in the firestore database (to generate the firestore document id before the upload)
@@ -81,20 +81,23 @@ export async function createProjectAsset(userId, projectId, model, material) {
     .ref
     .getDownloadURL();
 
-  const materialUrl = await materialTask
-    .ref
-    .getDownloadURL();
+  const toInsert = {
+    name : model.name.split('.').shift(),
+    model : modelUrl,
+    visible : true,
+    type : model.name.split('.').pop(),
+    created_at : firebase.firestore.Timestamp.now()
+  }
+
+  if (material) {
+    toInsert.materialUrl = await materialTask
+      .ref
+      .getDownloadURL()
+  }
 
   // Set the firestore file data
   await assetDocument
-    .set({
-        name : model.name.split('.').shift(),
-        model : modelUrl,
-        material : materialUrl,
-        visible : true,
-        type : model.name.split('.').pop(),
-        created_at : firebase.firestore.Timestamp.now()
-    });
+    .set(toInsert);
 
     return modelTask
 }

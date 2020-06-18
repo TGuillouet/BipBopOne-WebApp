@@ -64,6 +64,18 @@ class ProjectView extends Component {
         }
     }
 
+    reloadUserContacts = async () => {
+        try {
+            await this.setState({ loading: false });
+
+            const contacts = await getUserContactsList(this.props.context.user.uid);
+
+            this.setState({ userContacts: contacts, loading: false });
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
     changeVisibility = async (id, isVisible) => {
         await changeAssetVisibility(this.props.context.user.uid, this.props.match.params.id, id, !isVisible);
         this.reloadProjectAssets();
@@ -91,7 +103,7 @@ class ProjectView extends Component {
                         </div>
                     </section>
                 </div>
-                <div className="column is-half">
+                <div className="column is-half" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <section className="is-fullheight">
                         <ProjectFiles
                           assets={this.state.projectAssets}
@@ -105,6 +117,7 @@ class ProjectView extends Component {
                             whitelist={this.state.projectInfo.whitelist}
                             userId={this.props.context.user.uid}
                             projectId={this.props.match.params.id}
+                            onContactAdded={this.reloadUserContacts}
                         />
                     </section>
                 </div>
@@ -172,7 +185,7 @@ function ProjectFiles(props) {
     }
 
     return (
-      <div className="FichierProjet box">
+      <div className="FichierProjet box" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <Table
             items={props.assets}
             render={generateAssetRow}

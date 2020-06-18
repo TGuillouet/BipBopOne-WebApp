@@ -13,10 +13,10 @@
     height: 100vh;
 }
 
-.ContactProjet{
-    max-height: 25vh;
-    height: 25vh;
-}
+/*.ContactProjet{*/
+/*    max-height: 25vh;*/
+/*    height: 25vh;*/
+/*}*/
 
 .ContactProjet > table {
     width: 100%;
