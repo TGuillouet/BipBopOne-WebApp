@@ -67,7 +67,7 @@ function App() {
                     <p>
                     Bonjour à toi !
                     </p>
-                     Le site est encore en Beta donc si tu as trouvé un bug à nous faire remonter merci de nous envoyer un mail à <strong>support.prod@bipbopone.fr</strong>
+                     Le site est encore en Beta donc si tu as trouvé un bug tu peux nous le faire remonter en nous envoyant un mail à <strong>support.prod@bipbopone.fr</strong>
                     </div>
                 </article>
             </Modal>
