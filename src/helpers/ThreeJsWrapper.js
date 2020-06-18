@@ -135,5 +135,7 @@ export default class ThreeJsWrapper {
   }
 
   unloadAll() {
+    this.scene.dispose()
+    this.renderer.dispose()
   }
 }

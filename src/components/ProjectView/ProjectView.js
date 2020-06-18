@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as moment from "moment";
-import { faTrashAlt, faEye, faEyeSlash, faVectorSquare } from "@fortawesome/free-solid-svg-icons";
+import {faTrashAlt, faEye, faEyeSlash, faVectorSquare, faPaintRoller, faCube} from "@fortawesome/free-solid-svg-icons";
 
 import { Table } from "../Table";
 import { MyLoader } from "../Loader";
@@ -93,18 +93,18 @@ class ProjectView extends Component {
                 </div>
                 <div className="column is-half">
                     <section className="is-fullheight">
-                        <ContactProject
-                            userContacts={this.state.userContacts}
-                            whitelist={this.state.projectInfo.whitelist}
-                            userId={this.props.context.user.uid}
-                            projectId={this.props.match.params.id}
-                        />
                         <ProjectFiles
                           assets={this.state.projectAssets}
                           onComplete={this.reloadProjectAssets}
                           onDelete={this.reloadProjectAssets}
                           onChangeVisibility={this.changeVisibility}
                           onChangeRender={this.changeRenderedObject}
+                        />
+                        <ContactProject
+                            userContacts={this.state.userContacts}
+                            whitelist={this.state.projectInfo.whitelist}
+                            userId={this.props.context.user.uid}
+                            projectId={this.props.match.params.id}
                         />
                     </section>
                 </div>
@@ -116,6 +116,7 @@ class ProjectView extends Component {
 function ProjectFiles(props) {
 
     const [model, setModel] = React.useState(null);
+    const [material, setMaterial] = React.useState(null);
 
     const generateAssetRow = React.useCallback(({ id, name, created_at, visible }) => {
         const handleAssetVisible = (id, currentVisibility) => {
@@ -153,14 +154,20 @@ function ProjectFiles(props) {
     }, [props]);
 
     const handleChangeFile = file => {
-        if (file?.name.split(".").pop() === "obj") {
-            setModel(file[0]);
+        const fileExt = file?.name.split(".").pop();
+        if (fileExt === "obj") {
+            setModel(file);
+            return;
+        }
+        if (fileExt === "mtl") {
+            setMaterial(file);
+            return;
         }
     }
 
     const handleAddFile = async () => {
         this.setState({ loading: true })
-        await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, model);
+        await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, model, material);
         props.onComplete();
     }
 
@@ -172,7 +179,8 @@ function ProjectFiles(props) {
           />
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <FileInput onChange={handleChangeFile} />
+              <FileInput icon={faCube} text="Model*" accept=".obj" onChange={handleChangeFile} />
+              <FileInput icon={faPaintRoller} text="Material" accept=".mtl" onChange={handleChangeFile} />
               <button className="button is-primary" onClick={handleAddFile}>Ajouter</button>
           </div>
       </div>
