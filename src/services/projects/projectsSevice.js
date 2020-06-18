@@ -54,10 +54,11 @@ export function getProjectAssets(userId, projectId) {
  * Create an asset in a user's project in the database
  * @param {String} userId The user id in the database
  * @param {String} projectId The project id in the database
- * @param {File} file The asset's file to insert
+ * @param {File} model The asset's file to insert
+ * @param {File | null} material The asset's material to insert
  * @returns {Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>>}
  */
-export async function createProjectAsset(userId, projectId, file) {
+export async function createProjectAsset(userId, projectId, model, material) {
   // Create the document in the firestore database (to generate the firestore document id before the upload)
   const assetDocument = firestore
     .collection("users")
@@ -67,25 +68,35 @@ export async function createProjectAsset(userId, projectId, file) {
     .collection("assets")
     .doc();
 
-  // Upload the file
-  const uploadTask = await storage.ref(`${userId}/${projectId}/${assetDocument.id}/${file.name}`).put(file);
+  const promises = [
+    storage.ref(`${userId}/${projectId}/${assetDocument.id}/${model.name}`).put(model)
+  ]
+  if (material) promises.push(storage.ref(`${userId}/${projectId}/${assetDocument.id}/${material.name}`).put(material));
 
-  // Get the url
-  const url = await uploadTask
+  // Upload the file
+  const [ modelTask, materialTask ] = await Promise.all(promises)
+
+  // Get the urls
+  const modelUrl = await modelTask
+    .ref
+    .getDownloadURL();
+
+  const materialUrl = await materialTask
     .ref
     .getDownloadURL();
 
   // Set the firestore file data
   await assetDocument
     .set({
-        name : file.name.split('.').shift(),
-        model : url,
+        name : model.name.split('.').shift(),
+        model : modelUrl,
+        material : materialUrl,
         visible : true,
-        type : file.name.split('.').pop(),
+        type : model.name.split('.').pop(),
         created_at : firebase.firestore.Timestamp.now()
     });
 
-    return uploadTask
+    return modelTask
 }
 
 /**

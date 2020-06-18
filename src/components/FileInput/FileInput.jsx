@@ -5,22 +5,21 @@ import {faFile} from "@fortawesome/free-solid-svg-icons";
 export function FileInput(props) {
   const [selectedFile, setFile] = React.useState(null);
 
-  const handleChangeFile = ({ target: files }) => {
-    setFile(files[0]);
-    console.log(selectedFile.name)
-    props.onChange(files[0])
+  const handleChangeFile = (e) => {
+    setFile(e.target.files[0]);
+    props.onChange(e.target.files[0])
   }
 
   return (
     <div className="file has-name">
       <label className="file-label">
-        <input type="file" onChange={handleChangeFile} accept=".obj" className="file-input" />
+        <input type="file" onChange={handleChangeFile} accept={props.accept} className="file-input" />
         <span className="file-cta">
           <span className="file-icon">
-            <FontAwesomeIcon icon={faFile} />
+            <FontAwesomeIcon icon={props.icon} />
           </span>
           <span className="file-label">
-            Model
+            {props.text}
           </span>
         </span>
         <span className="file-name">
