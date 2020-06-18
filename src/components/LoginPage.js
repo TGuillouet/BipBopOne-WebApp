@@ -36,6 +36,11 @@ function LoginPage () {
         }
     })
 
+    /**
+     * Sign in the user
+     * @param data
+     * @return {Promise<void>}
+     */
     async function onSubmit (data) {
         try {
             await auth.signInWithEmailAndPassword(data.mail, data.password);
@@ -45,7 +50,6 @@ function LoginPage () {
             setFormError(authErrorMessages[error.code]);
         }
     }
-
 
     return(
         <div className="content">

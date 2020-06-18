@@ -16,6 +16,9 @@ function ContactsPage(props) {
   const [ filteredContacts, setFilteredContacts ] = React.useState([]);
   const [ selectedContact, setSelectedContact ] = React.useState({});
 
+  /**
+   * Get the contacts from the database
+   */
   const fetchData = React.useCallback(async () => {
     // Fetch les contacts de l'utilisateur
     setLoadingState(true);
@@ -33,6 +36,9 @@ function ContactsPage(props) {
     fetchData();
   }, [fetchData, props.context.user.uid, setContacts]);
 
+  /**
+   * Will be called when we click on a row
+   */
   const onRowClick = React.useCallback((id) => {
     return async () => {
       const contact = contacts.find((contact) => contact.id === id);
@@ -43,10 +49,22 @@ function ContactsPage(props) {
     }
   }, [contacts]);
 
+  /**
+   * Filter in the dataset (in local)
+   * @param research
+   */
   const onResearch = (research) => {
     setFilteredContacts(contacts.filter((contact) => contact.first_name.includes(research) || contact.last_name.includes(research)));
   };
 
+  /**
+   * Generate a <tr /> element for the Table component
+   * @param {number} id
+   * @param {string} first_name
+   * @param {string} last_name
+   * @param {string} email
+   * @return {ReactElement}
+   */
   const generateRowComponent = ({ id, first_name, last_name, email }) => {
     return (
       <tr key={id} onClick={onRowClick(id)}>
@@ -57,6 +75,9 @@ function ContactsPage(props) {
     )
   };
 
+  /**
+   * Toggle the modal
+   */
   const toggleCreateProjectModal = React.useCallback(() => {
     if (createModalDisplayed) {
       setSelectedContact({});
@@ -65,6 +86,11 @@ function ContactsPage(props) {
     setCreateModalDisplayed(!createModalDisplayed);
   }, [createModalDisplayed]);
 
+  /**
+   * Save a contact in the database
+   * @param {object} contactData
+   * @return {Promise<void>}
+   */
   const saveContact = async (contactData) => {
     try {
       await upsertContact(props.context.user.uid, contactData.id, contactData)

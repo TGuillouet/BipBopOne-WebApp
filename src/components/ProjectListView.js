@@ -22,6 +22,11 @@ class ProjectListView extends Component {
         this.fetchProjectList(this.props.context.user.uid);
     }
 
+    /**
+     * Fetch the project list
+     * @param {number} userId
+     * @return {Promise<void>}
+     */
     fetchProjectList = async (userId) => {
         await this.setState({ isLoading: true })
         const projects = await getUserProjects(userId);
