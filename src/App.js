@@ -36,8 +36,8 @@ function App() {
 
     return (
         <div className="root columns">
-            <div class="bugreport">
-                <button onClick={() => setCreateModalDisplayed(true)}>
+            <div className="bugreport">
+                <button className="button" onClick={() => setCreateModalDisplayed(true)}>
                     <h2>Bug report</h2>
                 </button>
             </div>
