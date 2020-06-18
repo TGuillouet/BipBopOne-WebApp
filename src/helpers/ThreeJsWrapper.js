@@ -45,7 +45,9 @@ export default class ThreeJsWrapper {
 
     lights.forEach((light) => scene.add(light));
 
-    return { scene, camera, renderer };
+    this.scene = scene;
+    this.camera = camera;
+    this.renderer = renderer;
   }
 
   async loadObject(objectUrl) {
@@ -112,22 +114,25 @@ export default class ThreeJsWrapper {
     requestAnimationFrame(this.render);
   }
 
-  load = (domElement, objectUrl, materialUrl) => {
+  load = (objectUrl, materialUrl) => {
     this.loaded = false;
-    const { scene, camera, renderer } = this.initializeScene(domElement);
-
-    this.scene = scene;
-    this.camera = camera;
-    this.renderer = renderer;
-
     this.loadObject(objectUrl).then((obj) => {
       this.scene.add(obj);
+      this.currentLoadedAssetUUID = obj.uuid;
       this.loaded = true;
       requestAnimationFrame(this.render);
     });
   }
 
   unload() {
-    console.log("Unloaded !")
+    const object = this.scene?.getObjectByProperty("uuid", this.currentLoadedAssetUUID);
+    if (object) {
+      object.children[0].geometry.dispose();
+      object.children[0].material.dispose();
+      this.scene = this.scene.remove(object);
+    }
+  }
+
+  unloadAll() {
   }
 }

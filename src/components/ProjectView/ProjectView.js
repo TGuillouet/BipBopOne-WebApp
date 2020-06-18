@@ -65,13 +65,11 @@ class ProjectView extends Component {
     }
 
     changeVisibility = async (id, isVisible) => {
-        console.log("Updating visibility")
         await changeAssetVisibility(this.props.context.user.uid, this.props.match.params.id, id, !isVisible);
         this.reloadProjectAssets();
     }
 
     changeRenderedObject = (id) => {
-        console.log("Change rendered object", id)
         this.setState({ renderedObjectId: id })
     }
 
@@ -121,14 +119,11 @@ function ProjectFiles(props) {
 
     const generateAssetRow = React.useCallback(({ id, name, created_at, visible }) => {
         const handleAssetVisible = (id, currentVisibility) => {
-            props.onChangeVisibility(id, currentVisibility)
+            return () => props.onChangeVisibility(id, currentVisibility)
         }
 
         const handleAssetRender = (id) => {
-            return (e) => {
-                console.log(id)
-                props.onChangeRender(id)
-            }
+            return () => props.onChangeRender(id)
         }
 
         const handleAssetDelete = (id) => {
@@ -143,10 +138,10 @@ function ProjectFiles(props) {
               <td>{name}</td>
               <td>{moment(created_at.toDate()).format("DD/MM/YYYY")}</td>
               <td style={{ display: "flex", justifyContent: "space-around" }}>
-                  <button className="button" onClick={(e) => handleAssetVisible(id, visible)}>
+                  <button className="button" onClick={handleAssetRender(id)}>
                       <FontAwesomeIcon icon={faVectorSquare} />
                   </button>
-                  <button className="button" onClick={handleAssetRender(id)}>
+                  <button className="button" onClick={handleAssetVisible(id, visible)}>
                       <FontAwesomeIcon icon={(visible)? faEye: faEyeSlash} />
                   </button>
                   <button className="button" onClick={handleAssetDelete(id)}>

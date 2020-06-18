@@ -12,13 +12,23 @@ class ThreeJsView extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
-    console.log(nextProps.objectUrl !== this.props.objectUrl)
     return nextProps.objectUrl !== this.props.objectUrl;
   }
 
   componentDidMount() {
-    console.log("Asset name:", this.props.objectUrl)
-    if (this.props.objectUrl) wrapper.load(this.ref.current, this.props.objectUrl);
+    wrapper.initializeScene(this.ref.current)
+    if (this.props.objectUrl) wrapper.load(this.props.objectUrl);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    wrapper.unload()
+    if (this.props.objectUrl) {
+      wrapper.load(this.props.objectUrl);
+    }
+  }
+
+  componentWillUnmount() {
+    wrapper.unloadAll();
   }
 
   render() {
