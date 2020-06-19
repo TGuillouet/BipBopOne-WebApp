@@ -142,6 +142,7 @@ function ProjectFiles(props) {
 
     const [model, setModel] = React.useState(null);
     const [material, setMaterial] = React.useState(null);
+    const [canAddFile, setCanAddFile] = React.useState(false);
 
     const generateAssetRow = React.useCallback(({ id, name, created_at, visible }) => {
         const handleAssetVisible = (id, currentVisibility) => {
@@ -179,16 +180,19 @@ function ProjectFiles(props) {
         const fileExt = file?.name.split(".").pop();
         if (fileExt === "obj") {
             setModel(file);
+            setCanAddFile(true)
             return;
         }
         if (fileExt === "mtl") {
             setMaterial(file);
+            setCanAddFile(true)
             return;
         }
     }
 
     const handleAddFile = async () => {
         props.onAddFile(model, material);
+        setCanAddFile(false)
     }
 
     return (
@@ -201,7 +205,7 @@ function ProjectFiles(props) {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
               <FileInput icon={faCube} text="Model*" accept=".obj" onChange={handleChangeFile} />
               <FileInput icon={faPaintRoller} text="Material" accept=".mtl" onChange={handleChangeFile} />
-              <button className="button is-primary" onClick={handleAddFile}>Ajouter</button>
+              <button className="button is-primary" onClick={handleAddFile} disabled={!canAddFile}>Ajouter</button>
           </div>
       </div>
     );
