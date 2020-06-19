@@ -85,6 +85,11 @@ class ProjectView extends Component {
         this.setState({ renderedObjectId: id })
     }
 
+    onAssetDelete = async (id) => {
+        await deleteProjectAsset(this.props.context.user.uid, this.props.match.params.id, id);
+        this.reloadProjectAssets();
+    }
+
     render() {
         return (
           this.state.loading ?
@@ -108,7 +113,7 @@ class ProjectView extends Component {
                         <ProjectFiles
                           assets={this.state.projectAssets}
                           onComplete={this.reloadProjectAssets}
-                          onDelete={this.reloadProjectAssets}
+                          onDelete={this.onAssetDelete}
                           onChangeVisibility={this.changeVisibility}
                           onChangeRender={this.changeRenderedObject}
                         />
@@ -141,10 +146,7 @@ function ProjectFiles(props) {
         }
 
         const handleAssetDelete = (id) => {
-            return async () => {
-                await deleteProjectAsset(this.props.context.user.uid, this.props.match.params.id, id);
-                props.onDelete();
-            }
+            return () => props.onDelete(id);
         };
 
         return (
