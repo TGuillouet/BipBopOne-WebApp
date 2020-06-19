@@ -30,7 +30,11 @@ export default class ThreeJsWrapper {
     domElement.appendChild(renderer.domElement);
 
     const camera = this.initCamera({
-      aspect: width / height
+      fov: 50,
+      aspect: width / height,
+      near: 0.1,
+      far: 100,
+      position: { x: 0, y: 10, z: 20 }
     });
 
     this.initControls(camera, renderer);
@@ -215,10 +219,12 @@ export default class ThreeJsWrapper {
    * @public
    */
   unloadAll() {
-    this.scene.dispose()
-    this.renderer.dispose()
+    if (this.scene && this.renderer) {
+      this.scene.dispose()
+      this.renderer.dispose()
 
-    this.scene = null;
-    this.renderer = null;
+      this.scene = null;
+      this.renderer = null;
+    }
   }
 }
