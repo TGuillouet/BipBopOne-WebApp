@@ -59,11 +59,11 @@ function App() {
                 </Router>
             </UserContext.Provider>
             <Modal isActive={createModalDisplayed} onClose={toggleCloseModal}>
-                <article class="message is-info">
-                    <div class="message-header">
+                <article className="message is-info">
+                    <div className="message-header">
                         <p>Bug report</p>
                     </div>
-                    <div class="message-body">
+                    <div className="message-body">
                     <p>
                     Bonjour à toi !
                     </p>

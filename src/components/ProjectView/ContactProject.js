@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { Table } from "../Table";
 
-import { updateProjectDetail,getProjectAssets } from "../../services/projects/projectsSevice";
+import { updateProjectDetail } from "../../services/projects/projectsSevice";
 import { upsertContact } from "../../services/contacts/contacts";
 import {Modal} from "../Modal";
 import { ContactForm } from "../ContactForm";
