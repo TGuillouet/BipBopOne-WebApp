@@ -23,10 +23,10 @@ function ContactProject(props) {
 
     const [createModalDisplayed, setCreateModalDisplayed] = React.useState(false);
     const [selectedContact, setSelectedContact] = React.useState("");
-    const [whiteListProject, setwhiteListProject] = React.useState([]);
+    const [whiteListProject, setWhiteListProject] = React.useState([]);
 
     React.useEffect(() => {
-      setwhiteListProject(props.whitelist);
+      setWhiteListProject(props.whitelist);
     }, [props.whitelist])
 
     const generateRowComponentContact = (item) => {
@@ -35,11 +35,10 @@ function ContactProject(props) {
                 <td style={{ verticalAlign: "middle" }}>{item}</td>
                 <td style={{ display: "flex", justifyContent: "space-around" }}>
                   <button className="button" onClick={async () => {
-                    setSelectedContact(item)
                     await updateProjectDetail(props.userId, props.projectId, {
-                      whitelist: whiteListProject.filter(e => e !== selectedContact)
+                      whitelist: whiteListProject.filter(e => e !== item)
                     })
-                    setwhiteListProject(whiteListProject.filter(e => e !== selectedContact))
+                    setWhiteListProject(whiteListProject.filter(e => e !== item))
                   }}>
                     Bloquer
                   </button>
