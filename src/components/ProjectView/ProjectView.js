@@ -85,6 +85,13 @@ class ProjectView extends Component {
         this.setState({ renderedObjectId: id })
     }
 
+    onAssetAdd = async (model, material) => {
+        this.setState({ loading: true })
+        await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, model, material);
+        this.setState({ loading: false })
+        this.reloadProjectAssets();
+    }
+
     onAssetDelete = async (id) => {
         await deleteProjectAsset(this.props.context.user.uid, this.props.match.params.id, id);
         this.reloadProjectAssets();
@@ -112,7 +119,7 @@ class ProjectView extends Component {
                     <section className="is-fullheight">
                         <ProjectFiles
                           assets={this.state.projectAssets}
-                          onComplete={this.reloadProjectAssets}
+                          onAddFile={this.onAssetAdd}
                           onDelete={this.onAssetDelete}
                           onChangeVisibility={this.changeVisibility}
                           onChangeRender={this.changeRenderedObject}
@@ -181,9 +188,7 @@ function ProjectFiles(props) {
     }
 
     const handleAddFile = async () => {
-        this.setState({ loading: true })
-        await createProjectAsset(this.props.context.user.uid, this.props.match.params.id, model, material);
-        props.onComplete();
+        props.onAddFile(model, material);
     }
 
     return (
