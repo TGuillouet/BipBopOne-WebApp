@@ -56,6 +56,7 @@ function ContactProject(props) {
 
     const saveContact = async (contactData) => {
         try {
+
             await upsertContact(props.userId, contactData.id, contactData)
             setSelectedContact("");
             setCreateModalDisplayed(false);
@@ -66,8 +67,12 @@ function ContactProject(props) {
     };
 
     const onSubmit = async value => {
+      if (!whiteListProject.includes(value.email)) {
         whiteListProject.push(value.email)
         await updateProjectDetail(props.userId, props.projectId, { whitelist: whiteListProject })
+      }else{
+        alert("L'adresse mail est déjà dans la whitelist du projet")
+      }
         reset({ values: { email: "" } });
     }
 
