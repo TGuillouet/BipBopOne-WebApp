@@ -93,6 +93,7 @@ export default class ThreeJsWrapper {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 5, 0);
     controls.update();
+    controls.addEventListener("change", this.render)
   }
 
   /**
@@ -181,8 +182,6 @@ export default class ThreeJsWrapper {
     }
 
     this.renderer.render(this.scene, this.camera);
-
-    requestAnimationFrame(this.render);
   }
 
   /**
